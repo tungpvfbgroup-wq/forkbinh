@@ -6,6 +6,9 @@ namespace BillGameCore.Modules.Inventory.Infrastructure.Config
     [CreateAssetMenu(fileName = "InventorySettings", menuName = "BillGameCore/Inventory/Inventory Settings")]
     public sealed class InventorySettings : ScriptableObject
     {
+        public string ItemID;
+        public string ItemName;
+        public Sprite ItemIcon;
         // Thêm serialized config field ở đây.
     }
 }
