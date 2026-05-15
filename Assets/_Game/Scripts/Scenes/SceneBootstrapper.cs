@@ -12,21 +12,25 @@ namespace BillGameCore.Scenes
         private readonly PlayerSpawner   _playerSpawner;
         private readonly InputReader     _inputReader;
         private readonly SceneController _sceneController;
-
+        private readonly Transform _playerSpawnPoint;
         private PlayerRuntime _playerRuntime;
 
         public SceneBootstrapper(PlayerSpawner playerSpawner,
                                  InputReader inputReader,
-                                 SceneController sceneController)
+                                 SceneController sceneController,
+                                 Transform playerSpawnPoint
+
+            )
         {
             _playerSpawner   = playerSpawner;
             _inputReader     = inputReader;
             _sceneController = sceneController;
+            _playerSpawnPoint = playerSpawnPoint;
         }
-
+        
         public void Start()
         {
-            _playerRuntime = _playerSpawner.Spawn(Vector2.zero);
+            _playerRuntime = _playerSpawner.Spawn(_playerSpawnPoint.position);
             _inputReader.SetControlledEntity(_playerRuntime.Id);
             _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
         }

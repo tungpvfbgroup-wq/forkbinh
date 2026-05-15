@@ -31,7 +31,8 @@ namespace BillGameCore.Scenes
         [Header("Enemy")]
         [SerializeField] private EnemyView _enemyPrefab;
         [SerializeField] private EnemyConfig _enemyConfig;
-
+        [Header("Spawn Point")]
+        [SerializeField] private Transform _playerSpawnPoint;
         protected override void Configure(IContainerBuilder builder)
         {
             ValidateRequiredReferences();
@@ -44,6 +45,8 @@ namespace BillGameCore.Scenes
 
             builder.RegisterInstance(_playerPrefab);
             builder.RegisterInstance(_playerConfig);
+
+            builder.RegisterInstance(_playerSpawnPoint);
             builder.Register<PlayerSpawner>(Lifetime.Scoped);
 
             if (_enemyPrefab != null && _enemyConfig != null)
