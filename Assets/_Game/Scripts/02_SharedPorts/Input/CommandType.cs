@@ -4,9 +4,10 @@
     // KHÔNG XÓA hoặc đánh số lại các giá trị cũ (tương thích replay/save).
     public enum CommandType
     {
-        Move          = 0,
-        Attack        = 1,
-        Interact      = 2,
-        SwitchContext = 3,
+        None = 0,
+        Move          = 1,
+        Attack        = 2,
+        Interact      = 3,
+        SwitchContext = 4,
     }
 }

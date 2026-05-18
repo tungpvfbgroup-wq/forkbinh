@@ -7,7 +7,7 @@ namespace BillGameCore.SharedPorts.Input
     // Modules.Input.Commands và implement interface này.
     public interface ICommand
     {
-        EntityId    SourceId  { get; }   // ai tạo ra command này (ADR-02 identity)
+        EntityId    TargetId  { get; }   // ai tạo ra command này (ADR-02 identity)
         CommandType Type      { get; }
         float       Timestamp { get; }   // Time.time lúc tạo 
     }
