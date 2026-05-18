@@ -834,7 +834,7 @@ Consumer uses IInventoryWriteService
 | R15 | Domain/Application không dùng UnityEngine. |
 | R16 | Chỉ InputReader được enqueue command. |
 | R17 | Prefab có `[Inject]` phải instantiate qua `container.Instantiate()`. |
-| R18 | `EntityId.New()` chỉ gọi trong spawner/binder tạo entity instance. |
+| R18 | `EntityId.New()` CHỈ được gọi từ Spawner/Binder nơi tạo entity instance. |
 | R19 | Player death và Enemy death là hai handler riêng trong SceneController. |
 | R20 | Active scene startup nằm trong Scenes, không nằm trong Composition. |
 | R21 | Input runtime không dùng `PlayerInput` component và không dùng Generate C# wrapper; `InputReader` phải đi qua `InputActionGateway`. |
