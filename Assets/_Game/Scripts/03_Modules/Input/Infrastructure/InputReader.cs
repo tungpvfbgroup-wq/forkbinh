@@ -11,14 +11,14 @@ using EntityId = BillGameCore.Core.ValueObjects.EntityId;
 
 namespace BillGameCore.Modules.Input.Infrastructure
 {
-    // MonoBehaviour adapter: raw Unity input -> command objects.
-    // R16: This is the only class allowed to enqueue commands.
+    // Bộ chuyển đổi MonoBehaviour: biến đầu vào thô của Unity thành các đối tượng lệnh (command).
+    // R16: Đây là lớp (class) DUY NHẤT được phép đẩy các lệnh vào hàng đợi (enqueue commands).
     public sealed class InputReader : MonoBehaviour
     {
 #if UNITY_EDITOR
-        // Editor-only safety net for the approved baseline scene.
-        // Runtime ownership is still the serialized _actions field; when multiple
-        // scenes/input assets exist, assign _actions explicitly per scene.
+        // Lưới bảo hiểm chỉ chạy trong Editor dành cho màn chơi gốc (baseline scene) đã được phê duyệt.
+        // Khi game chạy thực tế (Runtime), quyền sở hữu vẫn thuộc về trường dữ liệu _actions được tuần tự hóa; 
+        // Khi có nhiều màn chơi hoặc nhiều file cấu hình nút bấm khác nhau, hãy tự tay kéo gán trực tiếp trường _actions cho từng màn chơi.
         private const string DefaultActionsAssetPath = "Assets/Settings/GameInput.inputactions";
 #endif
 
@@ -132,7 +132,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
 
         private void ReadVehicleMap()
         {
-            // Vehicle commands are added when the Vehicle slice exists.
+            // Các lệnh điều khiển xe (Vehicle commands) sẽ được thêm vào khi lát cắt tính năng Xe (Vehicle slice) được tạo ra.
         }
 
         private void EnsureGateway()
@@ -150,8 +150,8 @@ namespace BillGameCore.Modules.Input.Infrastructure
             if (_actions != null)
                 return;
 
-            // Do not treat this as a service locator pattern for runtime.
-            // It only prevents editor Play Mode from failing after scene/script refresh.
+            // Đừng coi việc này giống như mô hình Service Locator khi game đang chạy (Runtime).
+            // Nó chỉ giúp ngăn chế độ Play Mode trong Editor bị lỗi sau khi màn chơi (scene) hoặc mã nguồn (script) bị làm mới (refresh).
             _actions = AssetDatabase.LoadAssetAtPath<InputActionAsset>(DefaultActionsAssetPath);
             if (_actions != null && !UnityEngine.Application.isPlaying)
                 EditorUtility.SetDirty(this);
