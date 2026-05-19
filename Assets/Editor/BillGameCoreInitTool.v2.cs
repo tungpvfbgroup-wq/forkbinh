@@ -1,4 +1,4 @@
-// BillGameCore baseline tool.
+// BillGameCore baseline tool v2.2
 //
 // This editor tool intentionally does not generate gameplay modules.
 // The approved architecture is documented in Assets/Editor/CONTEXT.v2.md.
