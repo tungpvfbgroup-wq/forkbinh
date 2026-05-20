@@ -13,7 +13,7 @@ namespace BillGameCore.Modules.Player.Presentation
             _presenter = presenter;
         }
 
-        public void Tick(Vector2 move Input)
+        public void Tick(Vector2 moveInput)
         {
             if (_isDisposed)
             {
