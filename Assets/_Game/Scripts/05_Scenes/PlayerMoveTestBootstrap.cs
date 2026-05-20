@@ -15,14 +15,14 @@ namespace BillGameCore.Scenes
 
         private void Awake()
         {
-            var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed);
+            var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, _inputReader);//+
             _playerRuntime = playerSpawner.Spawn(_spawnPosition);
         }
 
         private void Update()
         {
-            var moveCommand = _inputReader.ReadMoveCommand();
-            _playerRuntime.Tick(new Vector2(moveCommand.X, moveCommand.Y));
+           // var moveCommand = _inputReader.ReadMoveCommand();
+            _playerRuntime.Tick();//-
         }
 
         private void OnDestroy()

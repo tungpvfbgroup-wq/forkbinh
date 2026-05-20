@@ -1,4 +1,5 @@
 using BillGameCore.Modules.Player.Application;
+using BillGameCore.SharedPorts.Input;
 using UnityEngine;
 
 namespace BillGameCore.Modules.Player.Presentation
@@ -7,18 +8,22 @@ namespace BillGameCore.Modules.Player.Presentation
     {
         private readonly PlayerView _view;
         private readonly PlayerApplication _application;
+        private readonly IInputCommandSource _inputCommandSource;
 
-        public PlayerPresenter(PlayerView view, PlayerApplication application)
+        public PlayerPresenter(PlayerView view, PlayerApplication application,
+            IInputCommandSource inputCommandSource)
         {
             _view = view;
             _application = application;
+            _inputCommandSource = inputCommandSource;
         }
 
-        public void TickMove(Vector2 moveInput) 
+        public void TickMove()    //(Vector2 moveInput) 
         {
+            var moveCommand = _inputCommandSource.ReadMoveCommand();
             _application.ComputeMoveVelocity(
-                moveInput.x,
-                moveInput.y,
+                moveCommand.X,    //moveInput.x,
+                moveCommand.Y,    //moveInput.y,
                 out float velocityX,
                 out float velocityY);
 
