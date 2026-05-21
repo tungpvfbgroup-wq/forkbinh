@@ -18,7 +18,7 @@ namespace BillGameCore.Modules.Player.Presentation
             _inputCommandSource = inputCommandSource;
         }
 
-        public void TickMove()    //(Vector2 moveInput) 
+        public void Tick()    //(Vector2 moveInput) 
         {
             //var moveCommand = _inputCommandSource.ReadMoveCommand();
             if (!_inputCommandSource.HasCommands)

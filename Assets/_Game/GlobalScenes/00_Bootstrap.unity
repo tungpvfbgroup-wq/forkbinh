@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 232444281}
-  - component: {fileID: 232444280}
+  - component: {fileID: 232444282}
   m_Layer: 0
   m_Name: PlayerMoveTestBootstrap
   m_TagString: Untagged
@@ -136,22 +136,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &232444280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 232444279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52fa0fa8abbba44aba790db14367a1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BillGameCore.Scenes::PlayerMoveTestBootstrap
-  _inputReader: {fileID: 1084239043}
-  _playerViewPrefab: {fileID: 1610993968}
-  _moveSpeed: 5
-  _spawnPosition: {x: 0, y: 0}
 --- !u!4 &232444281
 Transform:
   m_ObjectHideFlags: 0
@@ -167,6 +151,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &232444282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232444279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f44e2871a93e2848adad6ef03f297f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Scenes::SceneBootstrapper1
+  _inputReader: {fileID: 1084239043}
+  _playerViewPrefab: {fileID: 6439526814168233900, guid: c2a0b62e20eba414d825ea5e9c19ba57, type: 3}
+  _moveSpeed: 5
+  _spawnPosition: {x: 0, y: 0}
 --- !u!1 &1056146529
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,17 +349,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1610993968 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6439526814168233900, guid: c2a0b62e20eba414d825ea5e9c19ba57, type: 3}
-  m_PrefabInstance: {fileID: 4758808066156714928}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43393d6c5c70f4649a494331539fdb89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BillGameCore.Modules.Player::BillGameCore.Modules.Player.Presentation.PlayerView
 --- !u!1001 &4758808066156714928
 PrefabInstance:
   m_ObjectHideFlags: 0

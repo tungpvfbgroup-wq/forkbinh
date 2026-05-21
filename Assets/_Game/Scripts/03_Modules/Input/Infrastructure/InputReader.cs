@@ -54,6 +54,11 @@ namespace BillGameCore.Modules.Input.Infrastructure
         }
         private void Update()
         {
+            if (_commandBuffer == null)
+            {
+                throw new InvalidOperationException("InputReader requires a CommandBuffer before Update runs.");
+            }
+
             var moveInput = _moveAction.ReadValue<Vector2>();
             _commandBuffer.Enqueue(new MoveCommand(moveInput.x, moveInput.y));
         }

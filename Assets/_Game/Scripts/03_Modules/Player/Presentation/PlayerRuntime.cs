@@ -20,7 +20,7 @@ namespace BillGameCore.Modules.Player.Presentation
                 return;
             }
 
-            _presenter.TickMove(); //(moveInput);
+            _presenter.Tick(); //(moveInput);
         }
 
         public void Dispose()
