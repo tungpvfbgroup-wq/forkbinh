@@ -1,3 +1,5 @@
+using BillGameCore.Modules.Input.Application;
+using BillGameCore.Modules.Input.Commands;
 using BillGameCore.Modules.Input.Infrastructure;
 using BillGameCore.Modules.Player.Presentation;
 using UnityEngine;
@@ -15,7 +17,10 @@ namespace BillGameCore.Scenes
 
         private void Awake()
         {
-            var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, _inputReader);//+
+            var commandBuffer = new CommandBuffer(32);
+            _inputReader.SetCommandBuffer(commandBuffer);
+            var inputCommandSource = new InputCommandDispatcher(commandBuffer);
+            var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, inputCommandSource );//+
             _playerRuntime = playerSpawner.Spawn(_spawnPosition);
         }
 

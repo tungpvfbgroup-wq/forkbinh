@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 
 namespace BillGameCore.Modules.Input.Infrastructure
 {
-    public sealed class InputReader : MonoBehaviour, IInputCommandSource
+    public sealed class InputReader : MonoBehaviour
     {
         [SerializeField] private InputActionAsset _actions;
 
         private InputActionMap _playerActionMap;
         private InputAction _moveAction;
-
+        private CommandBuffer _commandBuffer;
         private void Awake()
         {
             ValidateConfiguration();
@@ -48,12 +48,18 @@ namespace BillGameCore.Modules.Input.Infrastructure
                 throw new InvalidOperationException("InputReader could not find action 'Player/Move'.");
             }
         }
-
-        public IMoveCommand ReadMoveCommand()
+        public void SetCommandBuffer(CommandBuffer commandBuffer)
+        {
+            _commandBuffer = commandBuffer;
+        }
+        private void Update()
         {
             var moveInput = _moveAction.ReadValue<Vector2>();
-            return new MoveCommand(moveInput.x, moveInput.y);
+            _commandBuffer.Enqueue(new MoveCommand(moveInput.x, moveInput.y));
         }
+        //public IMoveCommand ReadMoveCommand()
+           // var moveInput = _moveAction.ReadValue<Vector2>();
+          //  return new MoveCommand(moveInput.x, moveInput.y);
 
         private void CacheActions()
         {

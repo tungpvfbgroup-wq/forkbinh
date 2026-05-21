@@ -20,7 +20,27 @@ namespace BillGameCore.Modules.Player.Presentation
 
         public void TickMove()    //(Vector2 moveInput) 
         {
-            var moveCommand = _inputCommandSource.ReadMoveCommand();
+            //var moveCommand = _inputCommandSource.ReadMoveCommand();
+            if (!_inputCommandSource.HasCommands)
+            {
+                return;
+            }
+
+            if (!_inputCommandSource.TryDequeue(out var command))
+            {
+                return;
+            }
+
+            if (command.Type != CommandType.Move)
+            {
+                return;
+            }
+
+            if (command is not IMoveCommand moveCommand)
+            {
+                return;
+            }
+
             _application.ComputeMoveVelocity(
                 moveCommand.X,    //moveInput.x,
                 moveCommand.Y,    //moveInput.y,
