@@ -1,5 +1,6 @@
 using BillGameCore.Modules.Player.Application;
 using BillGameCore.SharedPorts.Input;
+using System;
 using UnityEngine;
 
 namespace BillGameCore.Modules.Player.Presentation
@@ -49,6 +50,8 @@ namespace BillGameCore.Modules.Player.Presentation
 
             _view.SetMoveVelocity(new Vector2(velocityX, velocityY));
         }
+
+        public Action OnDiedCallback { get; set; }
 
         public void Stop()
         {

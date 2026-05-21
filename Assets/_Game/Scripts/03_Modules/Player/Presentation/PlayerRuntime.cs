@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace BillGameCore.Modules.Player.Presentation
 {
@@ -21,6 +20,11 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
             _presenter.Tick(); //(moveInput);
+        }
+
+        public void SetOnDiedCallback(Action onDiedCallback)
+        {
+            _presenter.OnDiedCallback = onDiedCallback;
         }
 
         public void Dispose()

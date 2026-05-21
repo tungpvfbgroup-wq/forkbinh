@@ -25,6 +25,8 @@ namespace BillGameCore.Scenes
             var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, inputCommandSource);
             _playerRuntime = playerSpawner.Spawn(_spawnPosition);
 
+            _playerRuntime.SetOnDiedCallback(_sceneController.HandlePlayerDied);
+
             if (_sceneController == null)
             { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }
         }
