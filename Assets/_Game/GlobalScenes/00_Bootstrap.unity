@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 232444281}
   - component: {fileID: 232444282}
   m_Layer: 0
-  m_Name: PlayerMoveTestBootstrap
+  m_Name: SceneBootstrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
