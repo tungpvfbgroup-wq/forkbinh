@@ -15,7 +15,7 @@ namespace BillGameCore.Modules.Player.Presentation
         {
             _view = view;
             _application = application;
-            _inputCommandSource = inputCommandSource;
+            _inputCommandSource = inputCommandSource; 
         }
 
         public void Tick()    //(Vector2 moveInput) 
