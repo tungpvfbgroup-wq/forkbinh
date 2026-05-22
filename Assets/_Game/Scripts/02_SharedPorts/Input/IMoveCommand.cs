@@ -2,9 +2,9 @@ namespace BillGameCore.SharedPorts.Input
 {
     public interface IMoveCommand : ICommand
     {
-        float X { get; }
+        float DirX { get; }
 
-        float Y { get; }
+        float DirY { get; }
 
         bool IsMoving { get; }
     }

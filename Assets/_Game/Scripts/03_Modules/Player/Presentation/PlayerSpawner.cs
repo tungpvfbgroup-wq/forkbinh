@@ -1,7 +1,7 @@
 using BillGameCore.Modules.Player.Application;
 using BillGameCore.SharedPorts.Input;
 using UnityEngine;
-
+using BillGameCore.Core.ValueObjects;
 namespace BillGameCore.Modules.Player.Presentation
 {
     public sealed class PlayerSpawner
@@ -22,9 +22,12 @@ namespace BillGameCore.Modules.Player.Presentation
         {
             var playerView = Object.Instantiate(_playerViewPrefab, spawnPosition, Quaternion.identity);
 
+            var entityId = BillEntityId.New();
+            
             var application = new PlayerApplication(_moveSpeed);
-            var presenter = new PlayerPresenter(playerView, application, _inputCommandSource); //+
-            var runtime = new PlayerRuntime(presenter);
+            var presenter = new PlayerPresenter(playerView, application, _inputCommandSource, entityId); //+
+
+            var runtime = new PlayerRuntime(presenter, entityId);
 
             return runtime;
         }

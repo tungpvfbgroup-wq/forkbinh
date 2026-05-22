@@ -1,3 +1,4 @@
+using BillGameCore.Core.ValueObjects;
 using System;
 
 namespace BillGameCore.Modules.Player.Presentation
@@ -6,10 +7,11 @@ namespace BillGameCore.Modules.Player.Presentation
     {
         private readonly PlayerPresenter _presenter;
         private bool _isDisposed;
-
-        public PlayerRuntime(PlayerPresenter presenter)
+        public BillEntityId EntityId { get; }
+        public PlayerRuntime(PlayerPresenter presenter, BillEntityId entityId)
         {
             _presenter = presenter;
+            EntityId = entityId;
         }
 
         public void Tick ()    //(Vector2 moveInput)

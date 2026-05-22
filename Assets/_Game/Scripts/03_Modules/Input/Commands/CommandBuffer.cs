@@ -11,9 +11,6 @@ namespace BillGameCore.Modules.Input.Commands
         {
             _queue = new Queue<ICommand>(capacity);
         }
-
-        public bool HasCommands => _queue.Count > 0;
-
         public void Enqueue(ICommand command)
         {
             _queue.Enqueue(command);

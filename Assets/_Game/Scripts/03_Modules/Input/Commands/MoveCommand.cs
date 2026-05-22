@@ -1,19 +1,23 @@
+using BillGameCore.Core.ValueObjects;
 using BillGameCore.SharedPorts.Input;
 namespace BillGameCore.Modules.Input.Commands
 {
     public sealed class MoveCommand : IMoveCommand
     {
         public CommandType Type => CommandType.Move;
-        public MoveCommand(float x, float y)
+        public BillEntityId ControlledEntityId { get; }
+        public MoveCommand(BillEntityId controlledEntityId,float dirX, float dirY)
         {
-            X = x;
-            Y = y;
+            DirX = dirX;
+            DirY = dirY;
+            ControlledEntityId = controlledEntityId;
         }
         
-        public float X { get; }
+        public float DirX { get; }
 
-        public float Y { get; }
+        public float DirY { get; }
+        
 
-        public bool IsMoving => X != 0f || Y != 0f;
+        public bool IsMoving => DirX != 0f || DirY != 0f;
     }
 }
