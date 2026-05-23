@@ -89,7 +89,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
                 return;
             }
 
-            gateway.SetContext(targetContext);
+            gateway.SetContext(targetContext); 
             _commandBuffer.Clear();
         }
     }

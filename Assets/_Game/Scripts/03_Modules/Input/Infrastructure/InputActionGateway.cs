@@ -10,7 +10,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
     {
         private readonly InputActionMap _playerActionMap;
         private readonly InputAction _moveAction;
-        public InputContext CurrentContext { get; private set; }
+        public InputContext? CurrentContext { get; private set; }
         public InputActionGateway(InputActionAsset actions)
         {
             if (actions == null)
@@ -21,7 +21,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
             _playerActionMap = actions.FindActionMap(InputContextNames.Player, throwIfNotFound: true);
             _moveAction = _playerActionMap.FindAction("Move", throwIfNotFound: true);
 
-            CurrentContext = InputContext.Player;
+           // CurrentContext = InputContext.Player;
         }
         public void SetContext(InputContext context)
         {
@@ -47,8 +47,13 @@ namespace BillGameCore.Modules.Input.Infrastructure
         {
             GetCurrentActionMap().Disable();
         }
-        private InputActionMap GetCurrentActionMap()
+        private InputActionMap GetCurrentActionMap() //helper
         {
+            if (CurrentContext == null)
+            {
+                throw new InvalidOperationException("InputActionGateway requires an active input context.");
+            }
+
             return CurrentContext switch
             {
                 InputContext.Player => _playerActionMap,
