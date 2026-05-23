@@ -10,8 +10,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
     {
         [SerializeField] private InputActionAsset _actions;
 
-        //private InputActionMap _playerActionMap;
-        //private InputAction _moveAction;
         private CommandBuffer _commandBuffer;
         private BillEntityId _controlledEntityId;
         private InputActionGateway _inputActionGateway;
@@ -21,13 +19,10 @@ namespace BillGameCore.Modules.Input.Infrastructure
             {
                 throw new InvalidOperationException("InputReader requires a valid controlled entity id.");
             }
-
             _controlledEntityId = entityId;
         }
         private void Awake()
         {
-            //ValidateConfiguration();
-            //CacheActions();
             _inputActionGateway = EnsureGateway();
         }
         private InputActionGateway EnsureGateway()
@@ -52,19 +47,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
 
         public void ValidateConfiguration()
         {
-            //var playerActionMap = _actions.FindActionMap(InputContextNames.Player, throwIfNotFound: false);
-
-            // if (playerActionMap == null)
-            // {
-            //    throw new InvalidOperationException("InputReader could not find action map 'Player'.");
-            // }
-
-            // var moveAction = playerActionMap.FindAction("Move", throwIfNotFound: false);
-
-            // if (moveAction == null)
-            // {
-            //     throw new InvalidOperationException("InputReader could not find action 'Player/Move'.");
-            // }
             _ = EnsureGateway();
         }
         public void SetCommandBuffer(CommandBuffer commandBuffer)
@@ -92,14 +74,5 @@ namespace BillGameCore.Modules.Input.Infrastructure
             var dirY = moveInput.y;
             _commandBuffer.Enqueue(new MoveCommand(_controlledEntityId, dirX, dirY));
         }
-        //public IMoveCommand ReadMoveCommand()
-           // var moveInput = _moveAction.ReadValue<Vector2>();
-          //  return new MoveCommand(moveInput.x, moveInput.y);
-
-       // private void CacheActions()
-       // {
-           // _playerActionMap = _actions.FindActionMap(InputContextNames.Player, throwIfNotFound: true);
-           // _moveAction = _playerActionMap.FindAction("Move", throwIfNotFound: true);
-       // }
     }
 }
