@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using BillGameCore.Core.ValueObjects;
-using BillGameCore.Modules.Input.Context;
+using BillGameCore.SharedPorts.Input;
 namespace BillGameCore.Modules.Input.Infrastructure
 {
     public sealed class InputReader : MonoBehaviour
@@ -24,6 +24,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
         private void Awake()
         {
             _inputActionGateway = EnsureGateway();
+            _inputActionGateway.SetContext(InputContext.Player);
         }
         private InputActionGateway EnsureGateway()
         {
@@ -37,12 +38,12 @@ namespace BillGameCore.Modules.Input.Infrastructure
         }
         private void OnEnable()
         {
-            _inputActionGateway.EnablePlayer();
+            _inputActionGateway.EnableCurrentContext();
         }
 
         private void OnDisable()
         {
-            _inputActionGateway.DisablePlayer();
+            _inputActionGateway.DisableCurrentContext();
         }
 
         public void ValidateConfiguration()
@@ -73,6 +74,23 @@ namespace BillGameCore.Modules.Input.Infrastructure
             var dirX = moveInput.x;
             var dirY = moveInput.y;
             _commandBuffer.Enqueue(new MoveCommand(_controlledEntityId, dirX, dirY));
+        }
+        public void SwitchContext(InputContext targetContext)
+        {
+            if (_commandBuffer == null)
+            {
+                throw new InvalidOperationException("InputReader requires a CommandBuffer before switching context.");
+            }
+
+            var gateway = EnsureGateway();
+
+            if (gateway.CurrentContext == targetContext)
+            {
+                return;
+            }
+
+            gateway.SetContext(targetContext);
+            _commandBuffer.Clear();
         }
     }
 }
