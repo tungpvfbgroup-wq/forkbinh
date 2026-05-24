@@ -304,6 +304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fe0516744e522418681ce898e69a33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::ChestBinder
+  _spriteRenderer: {fileID: 239006184}
+  _interactionTrigger: {fileID: 239006185}
 --- !u!4 &239006187
 Transform:
   m_ObjectHideFlags: 0
