@@ -36,6 +36,8 @@ namespace BillGameCore.Modules.Player.Presentation
                     continue;
                 }
 
+
+
                 if (command is not IMoveCommand moveCommand)
                 {
                     continue;

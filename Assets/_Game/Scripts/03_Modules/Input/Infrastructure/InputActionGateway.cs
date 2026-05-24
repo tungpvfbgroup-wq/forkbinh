@@ -10,6 +10,8 @@ namespace BillGameCore.Modules.Input.Infrastructure
     {
         private readonly InputActionMap _playerActionMap;
         private readonly InputAction _moveAction;
+        private readonly InputAction _attackAction;
+        private readonly InputAction _interactAction;
         public InputContext? CurrentContext { get; private set; }
         public InputActionGateway(InputActionAsset actions)
         {
@@ -20,6 +22,8 @@ namespace BillGameCore.Modules.Input.Infrastructure
 
             _playerActionMap = actions.FindActionMap(InputContextNames.Player, throwIfNotFound: true);
             _moveAction = _playerActionMap.FindAction("Move", throwIfNotFound: true);
+            _attackAction = _playerActionMap.FindAction("Attack", throwIfNotFound: true);
+            _interactAction = _playerActionMap.FindAction("Interact", throwIfNotFound: true);
 
            // CurrentContext = InputContext.Player;
         }
@@ -69,6 +73,11 @@ namespace BillGameCore.Modules.Input.Infrastructure
         {
             EnsurePlayerContext();
             return _moveAction.ReadValue<Vector2>();
+        }
+        public bool WasInteractPressedThisFrame()
+        {
+            EnsurePlayerContext();
+            return _interactAction.WasPressedThisFrame();
         }
         private void EnsurePlayerContext()
         {
