@@ -6,7 +6,7 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
     {
         public bool HasInteracted => _application.HasInteracted;
         private readonly ChestApplication _application;
-        public Action InteractedCallback { get; set; }
+        public Action<ChestOpenResult> OpenedCallback { get; set; }
         public ChestPresenter(ChestApplication application)
         {
             _application = application;
@@ -18,11 +18,13 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
 
         public void Interact()
         {
-            if (!_application.TryInteract())
+            var result = _application.TryOpen();
+
+            if (!result.WasOpened)
             {
                 return;
             }
-            InteractedCallback?.Invoke();
+            OpenedCallback?.Invoke(result);
         }
     }
 } 

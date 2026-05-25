@@ -1,3 +1,4 @@
+using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.InteractionGroup.Chest.Domain;
 
 namespace BillGameCore.Modules.InteractionGroup.Chest.Application
@@ -5,10 +6,12 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Application
     public sealed class ChestApplication
     {
         private readonly ChestState _state;
+        private readonly ChestDefinition _definition;
         public bool HasInteracted => _state.HasInteracted;
-        public ChestApplication(ChestState state)
+        public ChestApplication(ChestState state, ChestDefinition definition)
         {
             _state = state;
+            _definition = definition;
         }
 
         public bool CanInteract()
@@ -16,15 +19,15 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Application
             return !_state.HasInteracted;
         }
 
-        public bool TryInteract()
+        public ChestOpenResult TryOpen()
         {
             if (_state.HasInteracted)
             {
-                return false;
+                return new ChestOpenResult(false, new RewardBundle(0));
             }
 
             _state.MarkInteracted();
-            return true;
+            return new ChestOpenResult(true, new RewardBundle(_definition.GoldReward));
         }
     }
 }

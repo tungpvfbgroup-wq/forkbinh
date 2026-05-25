@@ -43,6 +43,8 @@ namespace BillGameCore.Scenes
 
             if (_sceneController == null)
             { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }
+            var rewardGrantService = new DebugRewardGrantService();
+            _sceneController.SetRewardGrantService(rewardGrantService);
         }
 
         private void Update()

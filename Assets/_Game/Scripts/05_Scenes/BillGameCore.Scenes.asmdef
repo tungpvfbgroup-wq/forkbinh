@@ -9,7 +9,8 @@
         "BillGameCore.Modules.Player",
         "BillGameCore.Modules.Enemy",
         "VContainer",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "BillGameCore.Modules.InteractionGroup"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

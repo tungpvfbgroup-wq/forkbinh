@@ -8,6 +8,7 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
 {
     public sealed class ChestBinder : MonoBehaviour, IInteractable
     {
+        public Action<ChestOpenResult> OpenedCallback { get; set; }
         private ChestPresenter _presenter;
         [SerializeField] private ChestView _view;
         [SerializeField] private ChestConfig _config;
@@ -30,9 +31,9 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
         {
             var definition = BuildDefinition();
             var state = new ChestState(definition);
-            var application = new ChestApplication(state);
+            var application = new ChestApplication(state, definition);
             var presenter = new ChestPresenter(application);
-            presenter.InteractedCallback = HandleInteracted;
+            presenter.OpenedCallback = HandleOpened;
             return presenter;
         }
         private ChestDefinition BuildDefinition()
@@ -72,10 +73,11 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
         {
             GetRequiredPresenter().Interact();
         }
-        private void HandleInteracted()
+        private void HandleOpened(ChestOpenResult result)
         {
             EnsureViewReady();
             _view.ShowOpenedState();
+            OpenedCallback?.Invoke(result);
         }
         
     }

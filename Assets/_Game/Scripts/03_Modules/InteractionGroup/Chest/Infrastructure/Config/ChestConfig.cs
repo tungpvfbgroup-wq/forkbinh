@@ -8,9 +8,10 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Infrastructure.Config
     public sealed class ChestConfig : ScriptableObject
     {
         [field: SerializeField] public bool StartsOpened { get; private set; }
-    public ChestDefinition ToDefinition()
+        [field: SerializeField] public int GoldReward { get; private set; }
+        public ChestDefinition ToDefinition()
         {
-            return new ChestDefinition(StartsOpened);
+            return new ChestDefinition(StartsOpened, GoldReward);
         }
     }
  }
