@@ -1,40 +1,57 @@
 using BillGameCore.Core.Interaction;
+using System;
 using UnityEngine;
-
 namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
 {
     public sealed class ChestBinder : MonoBehaviour, IInteractable
     {
         private ChestPresenter _presenter;
-        [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private Collider2D _interactionTrigger;
+        [SerializeField] private ChestView _view;
         private void Awake()
         {
-            _presenter = new ChestPresenter();
-            _presenter.InteractedCallback = HandleInteracted;
+            ValidateConfiguration();
+            _presenter = BuildPresenter();
         }
-       
+        private ChestPresenter BuildPresenter()
+        {
+            var presenter = new ChestPresenter();
+            presenter.InteractedCallback = HandleInteracted;
+            return presenter;
+        }
+        private void ValidateConfiguration()
+        {
+            EnsureViewReady();
+        }
+        private ChestPresenter GetRequiredPresenter()
+        {
+            if (_presenter == null)
+            {
+                throw new InvalidOperationException("ChestBinder is not initialized.");
+            }
+
+            return _presenter;
+        }
+        private void EnsureViewReady()
+        {
+            if (_view == null)
+            {
+                throw new InvalidOperationException("ChestBinder requires a ChestView reference.");
+            }
+        }
         public bool CanInteract()
         {
-            return _presenter.CanInteract();
+            return GetRequiredPresenter().CanInteract();
         }
 
         public void Interact()
         {
-            _presenter.Interact();
+            GetRequiredPresenter().Interact();
         }
         private void HandleInteracted()
         {
-            if (_interactionTrigger != null)
-            {
-                _interactionTrigger.enabled = false;
-            }
-
-            if (_spriteRenderer != null)
-            {
-                _spriteRenderer.color = Color.gray;
-            }
-            Debug.Log("Chest interacted.", this);
+            EnsureViewReady();
+            _view.ShowOpenedState();
         }
+        
     }
 }

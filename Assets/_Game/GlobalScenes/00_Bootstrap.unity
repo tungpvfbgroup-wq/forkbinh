@@ -177,9 +177,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 239006187}
-  - component: {fileID: 239006186}
-  - component: {fileID: 239006185}
   - component: {fileID: 239006184}
+  - component: {fileID: 239006190}
+  - component: {fileID: 239006189}
+  - component: {fileID: 239006188}
   m_Layer: 0
   m_Name: Chest_Test
   m_TagString: Untagged
@@ -246,7 +247,49 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &239006185
+--- !u!4 &239006187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239006183}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.7, y: 3.12, z: 0}
+  m_LocalScale: {x: 6.6247, y: 6.3234, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &239006188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239006183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e090cf9d1b13264db314dd8b424f5e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::BillGameCore.Modules.InteractionGroup.Chest.Presentation.ChestView
+  _spriteRenderer: {fileID: 239006184}
+  _interactionTrigger: {fileID: 239006190}
+--- !u!114 &239006189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239006183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fe0516744e522418681ce898e69a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::BillGameCore.Modules.InteractionGroup.Chest.Presentation.ChestBinder
+  _view: {fileID: 239006188}
+--- !u!61 &239006190
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -280,7 +323,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.000000074505806, y: 0.003252834}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
     pivot: {x: 0.5, y: 0.5}
@@ -290,37 +333,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.3607113, y: 0.38779312}
+  m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
---- !u!114 &239006186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239006183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4fe0516744e522418681ce898e69a33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::ChestBinder
-  _spriteRenderer: {fileID: 239006184}
-  _interactionTrigger: {fileID: 239006185}
---- !u!4 &239006187
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239006183}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7, y: 3.12, z: 0}
-  m_LocalScale: {x: 6.6247, y: 6.3234, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &284295089
 GameObject:
   m_ObjectHideFlags: 0
