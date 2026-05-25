@@ -365,6 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b54c8ff215804e4981e9ba0e9b26353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Scenes::BillGameCore.Scenes.SceneController
+  _chestBinder: {fileID: 239006189}
 --- !u!4 &284295091
 Transform:
   m_ObjectHideFlags: 0
