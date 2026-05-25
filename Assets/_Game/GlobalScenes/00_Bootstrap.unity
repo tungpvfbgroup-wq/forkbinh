@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::BillGameCore.Modules.InteractionGroup.Chest.Presentation.ChestBinder
   _view: {fileID: 239006188}
+  _config: {fileID: 11400000, guid: 63634976faa5bd2439a7a5e92e3eb67a, type: 2}
 --- !u!61 &239006190
 BoxCollider2D:
   m_ObjectHideFlags: 0
