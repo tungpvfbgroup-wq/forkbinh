@@ -33,13 +33,13 @@ namespace BillGameCore.Scenes
         {
             var commandBuffer = new CommandBuffer(32);
             _inputReader.SetCommandBuffer(commandBuffer);
-
+            
             var inputCommandSource = new InputCommandDispatcher(commandBuffer);
             var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, inputCommandSource);
             _playerRuntime = playerSpawner.Spawn(_spawnPosition);
             _inputReader.SetControlledEntity(_playerRuntime.EntityId);
 
-            _playerRuntime.SetOnDiedCallback(_sceneController.HandlePlayerDied);
+            _playerRuntime.SetOnDiedCallback(_sceneController.HandlePlayerDied); 
 
             if (_sceneController == null)
             { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }

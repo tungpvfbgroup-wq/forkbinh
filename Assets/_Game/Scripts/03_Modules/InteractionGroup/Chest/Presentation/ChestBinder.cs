@@ -40,6 +40,13 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
         {
             return _config.ToDefinition();
         }
+        private void EnsureViewReady()
+        {
+            if (_view == null)
+            {
+                throw new InvalidOperationException("ChestBinder requires a ChestView reference.");
+            }
+        }
         private void ValidateConfiguration()
         {
             EnsureViewReady();
@@ -57,13 +64,7 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Presentation
 
             return _presenter;
         }
-        private void EnsureViewReady()
-        {
-            if (_view == null)
-            {
-                throw new InvalidOperationException("ChestBinder requires a ChestView reference.");
-            }
-        }
+       
         public bool CanInteract()
         {
             return GetRequiredPresenter().CanInteract();
