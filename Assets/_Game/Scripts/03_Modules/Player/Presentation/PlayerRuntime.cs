@@ -14,14 +14,14 @@ namespace BillGameCore.Modules.Player.Presentation
             EntityId = entityId;
         }
 
-        public void Tick ()    //(Vector2 moveInput)
+        public void Tick ()    
         {
             if (_isDisposed)
             {
                 return;
             }
 
-            _presenter.Tick(); //(moveInput);
+            _presenter.Tick(); 
         }
 
         public void SetOnDiedCallback(Action onDiedCallback)
