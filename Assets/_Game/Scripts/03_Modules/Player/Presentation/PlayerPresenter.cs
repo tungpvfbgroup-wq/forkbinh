@@ -86,8 +86,8 @@ namespace BillGameCore.Modules.Player.Presentation
             _application.ComputeMoveVelocity(
                 latestMoveCommand.DirX,
                 latestMoveCommand.DirY,
-                out var velocityX,
-                out var velocityY);
+                out float velocityX,
+                out float velocityY);
 
             _view.SetMoveVelocity(new Vector2(velocityX, velocityY));
         }
