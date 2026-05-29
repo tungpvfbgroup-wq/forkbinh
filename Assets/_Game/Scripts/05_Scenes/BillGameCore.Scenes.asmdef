@@ -10,7 +10,8 @@
         "BillGameCore.Modules.Enemy",
         "VContainer",
         "Unity.InputSystem",
-        "BillGameCore.Modules.InteractionGroup"
+        "BillGameCore.Modules.InteractionGroup",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

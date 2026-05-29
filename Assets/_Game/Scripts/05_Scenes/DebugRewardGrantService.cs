@@ -6,14 +6,19 @@ namespace BillGameCore.Scenes
 {
     public sealed class DebugRewardGrantService : IRewardGrantService
     {
+        public readonly DebugWalletService _wallet;
+        public DebugRewardGrantService(DebugWalletService wallet)
+        {
+            _wallet = wallet;
+        }
         public void Grant(RewardBundle bundle)
         {
-            if (bundle.Gold <= 0)
-            {
-                return;
-            }
+            _wallet.Grant(bundle);
 
-            Debug.Log($"Granted reward. Gold: {bundle.Gold}");
+            if (bundle.Gold > 0)
+            {
+                Debug.Log($"Granted reward. Gold: {bundle.Gold}. Total Gold: {_wallet.Gold}");
+            }
         }
     }
 }

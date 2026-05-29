@@ -16,7 +16,8 @@ namespace BillGameCore.Scenes
         [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
         [SerializeField] private SceneController _sceneController;
         private PlayerRuntime _playerRuntime;
-
+        private DebugWalletService _walletService;
+        public int CurrentGold => _walletService == null ? 0 : _walletService.Gold;
         [ContextMenu("Debug/Switch Context To Player")]
         private void DebugSwitchContextToPlayer()
         {
@@ -43,7 +44,8 @@ namespace BillGameCore.Scenes
 
             if (_sceneController == null)
             { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }
-            var rewardGrantService = new DebugRewardGrantService();
+           _walletService = new DebugWalletService();
+            var rewardGrantService = new DebugRewardGrantService(_walletService);
             _sceneController.SetRewardGrantService(rewardGrantService);
         }
 
