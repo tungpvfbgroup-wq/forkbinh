@@ -3,6 +3,7 @@ using BillGameCore.Modules.Input.Commands;
 using BillGameCore.Modules.Input.Infrastructure;
 using BillGameCore.Modules.Player.Presentation;
 using BillGameCore.SharedPorts.Input;
+using BillGameCore.SharedPorts.Economy;
 using System;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace BillGameCore.Scenes
         [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
         [SerializeField] private SceneController _sceneController;
         private PlayerRuntime _playerRuntime;
-        private WalletService _walletService;
+        private IWalletService _walletService;
         public int CurrentGold => _walletService == null ? 0 : _walletService.Gold;
         public int CurrentExperience => _walletService == null ? 0 : _walletService.Experience;
         [ContextMenu("Debug/Switch Context To Player")]
@@ -45,8 +46,9 @@ namespace BillGameCore.Scenes
 
             if (_sceneController == null)
             { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }
-           _walletService = new WalletService();
-            var rewardGrantService = new RewardGrantService(_walletService);
+           var walletService = new WalletService();
+            _walletService = walletService;
+            var rewardGrantService = new RewardGrantService(walletService);
             _sceneController.SetRewardGrantService(rewardGrantService);
         }
 
