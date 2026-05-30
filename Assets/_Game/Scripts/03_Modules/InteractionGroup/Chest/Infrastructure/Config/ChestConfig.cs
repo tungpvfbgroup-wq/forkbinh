@@ -9,9 +9,10 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Infrastructure.Config
     {
         [field: SerializeField] public bool StartsOpened { get; private set; }
         [field: SerializeField] public int GoldReward { get; private set; }
+        [field: SerializeField] public int ExperienceReward { get; private set; }
         public ChestDefinition ToDefinition()
         {
-            return new ChestDefinition(StartsOpened, GoldReward);
+            return new ChestDefinition(StartsOpened, GoldReward, ExperienceReward);
         }
     }
  }

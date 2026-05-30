@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: BillGameCore.Modules.InteractionGroup::BillGameCore.Modules.InteractionGroup.Chest.Infrastructure.Config.ChestConfig
   <StartsOpened>k__BackingField: 0
   <GoldReward>k__BackingField: 5
+  <ExperienceReward>k__BackingField: 100

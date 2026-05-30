@@ -9,7 +9,7 @@ namespace BillGameCore.Scenes
         [SerializeField] private TMP_Text _goldText;
 
         private int _lastGold = int.MinValue;
-
+        private int _lastExperience = int.MinValue;
         private void Awake()
         {
             if (_sceneBootstrapper == null)
@@ -21,25 +21,27 @@ namespace BillGameCore.Scenes
                 throw new InvalidOperationException("WalletHudView requires a TMP_Text reference.");
             }
             _lastGold = _sceneBootstrapper.CurrentGold; // Đọc ngay số vàng hiện tại (là 0)
-            RefreshGoldText(_lastGold); // Ép ô chữ biến thành "Gold: 0" NGAY LẬP TỨC
+            _lastExperience = _sceneBootstrapper.CurrentExperience;
+            RefreshGoldText(); // Ép ô chữ biến thành "Gold: 0" NGAY LẬP TỨC
         }
 
-        private void RefreshGoldText(int gold)
-        {
-            _goldText.text = $"Gold: {gold}";// Toàn bộ game chỉ có đúng MỘT dòng này lo việc in chữ.
+        private void RefreshGoldText()
+        {// Toàn bộ game chỉ có đúng MỘT dòng này lo việc in chữ.
+            _goldText.text = $"Gold: {_sceneBootstrapper.CurrentGold}\nExp: {_sceneBootstrapper.CurrentExperience}";
         }
-        
+
         private void Update()
         {
             var currentGold = _sceneBootstrapper.CurrentGold;
-
-            if (_lastGold == currentGold)
+            var currentExperience = _sceneBootstrapper.CurrentExperience;
+            if (_lastGold == currentGold && _lastExperience == currentExperience)
             {
                 return;
             }
 
             _lastGold = currentGold;
-            RefreshGoldText(currentGold);
+            _lastExperience = currentExperience;
+            RefreshGoldText();
         }
     }
 }

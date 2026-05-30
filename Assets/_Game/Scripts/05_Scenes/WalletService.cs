@@ -3,7 +3,7 @@ using BillGameCore.SharedPorts.Economy;
 
 namespace BillGameCore.Scenes
 {
-    public sealed class DebugWalletService : IWalletService
+    public sealed class WalletService : IWalletService
     {
         public int Gold { get; private set; }
         public int Experience { get; private set; }
@@ -11,6 +11,7 @@ namespace BillGameCore.Scenes
         public void Grant(RewardBundle bundle)
         {
             Gold += bundle.Gold;
+            Experience += bundle.Experience;
         }
     }
 }

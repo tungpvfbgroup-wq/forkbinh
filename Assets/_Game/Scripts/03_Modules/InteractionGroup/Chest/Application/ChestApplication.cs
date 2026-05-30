@@ -23,11 +23,11 @@ namespace BillGameCore.Modules.InteractionGroup.Chest.Application
         {
             if (_state.HasInteracted)
             {
-                return new ChestOpenResult(false, new RewardBundle(0));
+                return new ChestOpenResult(false, new RewardBundle(0,0));
             }
 
             _state.MarkInteracted();
-            return new ChestOpenResult(true, new RewardBundle(_definition.GoldReward));
+            return new ChestOpenResult(true, new RewardBundle(_definition.GoldReward, _definition.ExperienceReward));
         }
     }
 }
