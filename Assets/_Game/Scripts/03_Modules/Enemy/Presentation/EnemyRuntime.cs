@@ -1,6 +1,6 @@
 using System;
 using BillGameCore.Core.Rewards;
-
+using BillGameCore.Core.Combat;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public class EnemyRuntime
@@ -14,9 +14,9 @@ namespace BillGameCore.Modules.Enemy.Presentation
         {
             _presenter.DiedCallback = dieCallback;
         }
-        public void ReceiveDamage(float damage)
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
-            _presenter.ReceiveDamage(damage);
+            return _presenter.ReceiveDamage(damageInfo);
         }
     }
 }

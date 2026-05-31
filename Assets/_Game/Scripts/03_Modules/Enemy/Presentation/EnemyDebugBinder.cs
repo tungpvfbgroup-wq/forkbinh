@@ -1,14 +1,15 @@
 using System;
 using BillGameCore.Core.Rewards;
 using UnityEngine;
-
+using BillGameCore.Core.Combat;
+using BillGameCore.Core.ValueObjects;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public sealed class EnemyDebugBinder : MonoBehaviour
     {
         [SerializeField] private EnemyConfig _config;
         [SerializeField] private EnemyView _view;
-
+        [SerializeField] private float _debugDamageAmount = 1f;
         private EnemyRuntime _runtime;
 
         public Action<RewardBundle> DiedCallback { get; set; }
@@ -44,15 +45,19 @@ namespace BillGameCore.Modules.Enemy.Presentation
         {
             BuildRuntime();
         }
-        [ContextMenu("Debug/Kill Enemy")]
-        private void DebugKillEnemy()
+        [ContextMenu("Debug/Apply Damage")]
+        private void DebugApplyDamage()
         {
             if (_runtime == null)
             {
                 throw new InvalidOperationException("EnemyDebugBinder has not created an EnemyRuntime.");
             }
-
-            _runtime.ReceiveDamage(9999f);
+            if (_debugDamageAmount <= 0f)
+            {
+                throw new InvalidOperationException("EnemyDebugBinder requires a debug damage amount greater than 0.");
+            }
+            var damageInfo = new DamageInfo(_debugDamageAmount, BillEntityId.Invalid, false);
+            _runtime.ReceiveDamage(damageInfo);
         }
     }
 }

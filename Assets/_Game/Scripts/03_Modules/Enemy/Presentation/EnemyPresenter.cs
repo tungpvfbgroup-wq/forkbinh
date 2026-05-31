@@ -2,7 +2,7 @@
 using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.Enemy.Application;
 using System;
-
+using BillGameCore.Core.Combat;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public class EnemyPresenter
@@ -14,9 +14,9 @@ namespace BillGameCore.Modules.Enemy.Presentation
             _application = application;
             _application.DiedCallback = HandleDied;
         }
-        public void ReceiveDamage(float damage)
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
-            _application.ReceiveDamage(damage);
+            return _application.ReceiveDamage(damageInfo);
         }
         private void HandleDied(RewardBundle reward)
         {

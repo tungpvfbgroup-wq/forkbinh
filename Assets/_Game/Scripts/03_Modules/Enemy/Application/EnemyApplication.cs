@@ -1,10 +1,10 @@
 using System;
 using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.Enemy.Domain;
-
+using BillGameCore.Core.Combat;
 namespace BillGameCore.Modules.Enemy.Application
 {
-    public sealed class EnemyApplication
+    public sealed class EnemyApplication : IDamageReceiver
     {
         private readonly EnemyState _state;
         private readonly EnemyDefinition _definition;
@@ -16,29 +16,34 @@ namespace BillGameCore.Modules.Enemy.Application
             _state = state;
         }
 
-        public void ReceiveDamage(float damage)
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
             if (_state.IsDead)
             {
-                return;
+                return new DamageResult(0f, _state.CurrentHealth, false);
             }
-
-            if (damage < 0f)
+            var requestedDamage = damageInfo.Amount;
+            if (requestedDamage < 0f)
             {
-                damage = 0f;
+                requestedDamage = 0f;
             }
-
-            var nextHealth = _state.CurrentHealth - damage;
+            var appliedDamage = requestedDamage;
+            if (appliedDamage > _state.CurrentHealth)
+            {
+                appliedDamage = _state.CurrentHealth;
+            }
+            var nextHealth = _state.CurrentHealth - appliedDamage;
 
             if (nextHealth > 0f)
             {
                 _state.SetCurrentHealth(nextHealth);
-                return;
+                return new DamageResult(appliedDamage, nextHealth, false);
             }
 
             _state.SetCurrentHealth(0f);
             _state.MarkDead();
             DiedCallback?.Invoke(new RewardBundle(_definition.GoldReward, _definition.ExperienceReward));
+            return new DamageResult(appliedDamage, 0f, true);
         }
     }
 }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c47784543ba95478adac4476787b00, type: 3}
   m_Name: EnemyConfig
   m_EditorClassIdentifier: BillGameCore.Modules.Enemy::EnemyConfig
-  <MaxHealth>k__BackingField: 100
+  <MaxHealth>k__BackingField: 10
   <GoldReward>k__BackingField: 38
   <ExperienceReward>k__BackingField: 79

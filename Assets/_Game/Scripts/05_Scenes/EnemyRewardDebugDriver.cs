@@ -1,8 +1,9 @@
-using System;
+using BillGameCore.Core.Combat;
 using BillGameCore.Core.Rewards;
+using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Enemy.Presentation;
+using System;
 using UnityEngine;
-
 namespace BillGameCore.Scenes
 {
     public sealed class EnemyRewardDebugDriver : MonoBehaviour
@@ -45,8 +46,7 @@ namespace BillGameCore.Scenes
             {
                 throw new InvalidOperationException("EnemyRewardDebugDriver has not created an EnemyRuntime.");
             }
-
-            _enemyRuntime.ReceiveDamage(9999f);
+         // _enemyRuntime.ReceiveDamage(999 );
         }
     }
 }
