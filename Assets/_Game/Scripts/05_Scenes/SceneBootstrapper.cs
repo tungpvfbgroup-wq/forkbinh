@@ -16,10 +16,12 @@ namespace BillGameCore.Scenes
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
         [SerializeField] private SceneController _sceneController;
+        [SerializeField] private WalletReadSource _walletReadSource;
         private PlayerRuntime _playerRuntime;
         private IWalletService _walletService;
-        public int CurrentGold => _walletService == null ? 0 : _walletService.Gold;
-        public int CurrentExperience => _walletService == null ? 0 : _walletService.Experience;
+        
+        //public int CurrentGold => _walletService == null ? 0 : _walletService.Gold;
+        // public int CurrentExperience => _walletService == null ? 0 : _walletService.Experience;
         [ContextMenu("Debug/Switch Context To Player")]
         private void DebugSwitchContextToPlayer()
         {
@@ -49,6 +51,13 @@ namespace BillGameCore.Scenes
            var walletService = new WalletService();
             _walletService = walletService;
             var rewardGrantService = new RewardGrantService(walletService);
+
+            if (_walletReadSource == null)
+            {
+                throw new InvalidOperationException("SceneBootstrapper requires a WalletReadSource reference.");
+            }
+
+            _walletReadSource.SetWalletService(_walletService);
             _sceneController.SetRewardGrantService(rewardGrantService);
         }
 
