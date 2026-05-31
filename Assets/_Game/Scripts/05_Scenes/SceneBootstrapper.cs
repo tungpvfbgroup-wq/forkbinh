@@ -6,7 +6,6 @@ using BillGameCore.SharedPorts.Input;
 using BillGameCore.SharedPorts.Economy;
 using System;
 using UnityEngine;
-
 namespace BillGameCore.Scenes
 {
     public sealed class SceneBootstrapper : MonoBehaviour
@@ -20,8 +19,6 @@ namespace BillGameCore.Scenes
         private PlayerRuntime _playerRuntime;
         private IWalletService _walletService;
         
-        //public int CurrentGold => _walletService == null ? 0 : _walletService.Gold;
-        // public int CurrentExperience => _walletService == null ? 0 : _walletService.Experience;
         [ContextMenu("Debug/Switch Context To Player")]
         private void DebugSwitchContextToPlayer()
         {

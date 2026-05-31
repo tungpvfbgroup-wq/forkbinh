@@ -1,17 +1,22 @@
-using BillGameCore.Core.Rewards;
 using BillGameCore.SharedPorts.Economy;
+using System;
 
 namespace BillGameCore.Scenes
 {
-    public sealed class WalletService : IWalletService
+    public sealed class WalletService : IWalletService, IWalletWriteService
     {
+        public event Action Changed;
         public int Gold { get; private set; }
         public int Experience { get; private set; }
-
-        public void Grant(RewardBundle bundle)
+        public void AddGold(int amount)
         {
-            Gold += bundle.Gold;
-            Experience += bundle.Experience;
+            Gold += amount;
+            Changed?.Invoke();
+        }
+        public void AddExperience(int amount)
+        {
+            Experience += amount;
+            Changed?.Invoke();
         }
     }
 }
