@@ -1163,6 +1163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BillGameCore.Modules.Enemy::BillGameCore.Modules.Enemy.Presentation.EnemyDebugBinder
   _config: {fileID: 11400000, guid: 9fcdfa14a9c3f634f90bd6bd553e263f, type: 2}
   _view: {fileID: 1655914785}
+  _debugDamageAmount: 1
 --- !u!212 &1655914788
 SpriteRenderer:
   serializedVersion: 2

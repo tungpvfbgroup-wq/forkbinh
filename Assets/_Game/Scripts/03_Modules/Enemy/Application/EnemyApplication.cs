@@ -15,7 +15,10 @@ namespace BillGameCore.Modules.Enemy.Application
             _definition = definition;
             _state = state;
         }
-
+        public EnemyHealthReadModel GetHealth()
+        {
+            return new EnemyHealthReadModel(_state.CurrentHealth, _state.IsDead);
+        }
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
             if (_state.IsDead)

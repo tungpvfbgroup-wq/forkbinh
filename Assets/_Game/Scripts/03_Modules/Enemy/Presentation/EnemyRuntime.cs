@@ -1,6 +1,7 @@
-using System;
-using BillGameCore.Core.Rewards;
 using BillGameCore.Core.Combat;
+using BillGameCore.Core.Rewards;
+using BillGameCore.Modules.Enemy.Application;
+using System;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public class EnemyRuntime
@@ -17,6 +18,10 @@ namespace BillGameCore.Modules.Enemy.Presentation
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
             return _presenter.ReceiveDamage(damageInfo);
+        }
+        public EnemyHealthReadModel GetHealth()
+        {
+            return _presenter.GetHealth();
         }
     }
 }

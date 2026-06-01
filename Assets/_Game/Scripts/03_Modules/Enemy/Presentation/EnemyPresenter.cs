@@ -14,6 +14,10 @@ namespace BillGameCore.Modules.Enemy.Presentation
             _application = application;
             _application.DiedCallback = HandleDied;
         }
+        public EnemyHealthReadModel GetHealth()
+        {
+            return _application.GetHealth();
+        }
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
             return _application.ReceiveDamage(damageInfo);

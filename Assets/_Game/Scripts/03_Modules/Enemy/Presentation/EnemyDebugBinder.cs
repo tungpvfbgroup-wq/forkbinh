@@ -5,7 +5,7 @@ using BillGameCore.Core.Combat;
 using BillGameCore.Core.ValueObjects;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
-    public sealed class EnemyDebugBinder : MonoBehaviour
+    public sealed class EnemyDebugBinder : MonoBehaviour, IDamageReceiver
     {
         [SerializeField] private EnemyConfig _config;
         [SerializeField] private EnemyView _view;
@@ -34,12 +34,25 @@ namespace BillGameCore.Modules.Enemy.Presentation
             var enemySpawner = new EnemySpawner(_config);
             _runtime = enemySpawner.Spawn();
             _runtime.SetDiedCallback(HandleDied);
+            var health = _runtime.GetHealth();
+            Debug.Log($"Enemy runtime ready. Health: {health.CurrentHealth}, IsDead: {health.IsDead}");
         }
         private void HandleDied(RewardBundle reward)
         {
             _view.ShowDeadState();
             DiedCallback?.Invoke(reward);
         }
+
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
+        {
+            if (_runtime == null)
+            {
+                throw new InvalidOperationException("EnemyDebugBinder has not created an EnemyRuntime.");
+            }
+
+            return _runtime.ReceiveDamage(damageInfo);
+        }
+
         [ContextMenu("Debug/Reset Enemy")]
         private void DebugResetEnemy()
         {
@@ -57,7 +70,10 @@ namespace BillGameCore.Modules.Enemy.Presentation
                 throw new InvalidOperationException("EnemyDebugBinder requires a debug damage amount greater than 0.");
             }
             var damageInfo = new DamageInfo(_debugDamageAmount, BillEntityId.Invalid, false);
-            _runtime.ReceiveDamage(damageInfo);
+            var result = _runtime.ReceiveDamage(damageInfo);
+
+            Debug.Log(
+                $"Enemy took damage. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
         }
     }
 }

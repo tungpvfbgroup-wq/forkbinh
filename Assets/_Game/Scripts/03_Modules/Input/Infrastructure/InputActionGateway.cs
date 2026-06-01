@@ -19,13 +19,10 @@ namespace BillGameCore.Modules.Input.Infrastructure
             {
                 throw new InvalidOperationException("InputActionGateway requires an InputActionAsset.");
             }
-
             _playerActionMap = actions.FindActionMap(InputContextNames.Player, throwIfNotFound: true);
             _moveAction = _playerActionMap.FindAction("Move", throwIfNotFound: true);
             _attackAction = _playerActionMap.FindAction("Attack", throwIfNotFound: true);
             _interactAction = _playerActionMap.FindAction("Interact", throwIfNotFound: true);
-
-           // CurrentContext = InputContext.Player;
         }
         public void SetContext(InputContext context)
         {
@@ -34,7 +31,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
                 case InputContext.Player:
                     CurrentContext = InputContext.Player;
                     return;
-
                 case InputContext.UI:
                 case InputContext.Vehicle:
                 default:
@@ -46,7 +42,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
         {
             GetCurrentActionMap().Enable();
         }
-
         public void DisableCurrentContext()
         {
             GetCurrentActionMap().Disable();
@@ -57,7 +52,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
             {
                 throw new InvalidOperationException("InputActionGateway requires an active input context.");
             }
-
             return CurrentContext switch
             {
                 InputContext.Player => _playerActionMap,
@@ -79,6 +73,11 @@ namespace BillGameCore.Modules.Input.Infrastructure
             EnsurePlayerContext();
             return _interactAction.WasPressedThisFrame();
         }
+        public bool WasAttackPressedThisFrame()
+        {
+            EnsurePlayerContext();
+            return _attackAction.WasPressedThisFrame();
+        }
         private void EnsurePlayerContext()
         {
             if (CurrentContext != InputContext.Player)
@@ -87,5 +86,6 @@ namespace BillGameCore.Modules.Input.Infrastructure
                     $"InputActionGateway requires Player context to read move, but current context is '{CurrentContext}'.");
             }
         }
+       
     }
 }

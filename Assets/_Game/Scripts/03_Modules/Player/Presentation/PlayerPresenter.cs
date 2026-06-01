@@ -1,3 +1,4 @@
+using BillGameCore.Core.Combat;
 using BillGameCore.Core.Interaction;
 using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Player.Application;
@@ -13,6 +14,7 @@ namespace BillGameCore.Modules.Player.Presentation
         private readonly IInputCommandSource _inputCommandSource;
         private BillEntityId _entityId;
         private IInteractable _currentInteractable;
+        private IDamageReceiver _currentDamageReceiver;
         public PlayerPresenter(PlayerView view, PlayerApplication application,
             IInputCommandSource inputCommandSource, BillEntityId entityId)
         {
@@ -33,6 +35,12 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
             _currentInteractable = interactable;
+
+            var damageReceiver = other.GetComponent<IDamageReceiver>();
+            if (damageReceiver != null)
+            {
+                _currentDamageReceiver = damageReceiver;
+            }
         }
 
         private void HandleTriggerExited(Collider2D other)
@@ -46,6 +54,12 @@ namespace BillGameCore.Modules.Player.Presentation
             if (_currentInteractable == interactable)
             {
                 _currentInteractable = null;
+            }
+
+            var damageReceiver = other.GetComponent<IDamageReceiver>();
+            if (damageReceiver != null && _currentDamageReceiver == damageReceiver)
+            {
+                _currentDamageReceiver = null;
             }
         }
         public void Tick()
@@ -63,6 +77,14 @@ namespace BillGameCore.Modules.Player.Presentation
                     if (command is IInteractCommand interactCommand)
                     {
                         HandleInteractCommand(interactCommand);
+                    }
+                    continue;
+                }
+                if (command.Type == CommandType.Attack)
+                {
+                    if (command is IAttackCommand attackCommand)
+                    {
+                        HandleAttackCommand(attackCommand);
                     }
                     continue;
                 }
@@ -104,6 +126,16 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
             _currentInteractable.Interact();
+        }
+        private void HandleAttackCommand(IAttackCommand attackCommand)
+        {
+            if (_currentDamageReceiver == null)
+            {
+                return;
+            }
+
+            var damageInfo = new DamageInfo(1f, _entityId, false);
+            _currentDamageReceiver.ReceiveDamage(damageInfo);
         }
         public Action OnDiedCallback { get; set; }
 
