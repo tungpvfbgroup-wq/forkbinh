@@ -42,15 +42,22 @@ namespace BillGameCore.Modules.Enemy.Presentation
             _view.ShowDeadState();
             DiedCallback?.Invoke(reward);
         }
-
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
             if (_runtime == null)
             {
                 throw new InvalidOperationException("EnemyDebugBinder has not created an EnemyRuntime.");
             }
+            var result = _runtime.ReceiveDamage(damageInfo);
 
-            return _runtime.ReceiveDamage(damageInfo);
+            if (result.AppliedDamage > 0f && !result.JustDied)
+            {
+                _view.ShowHitState();
+            }
+            Debug.Log(
+    $"Enemy took damage. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
+
+            return result;
         }
 
         [ContextMenu("Debug/Reset Enemy")]

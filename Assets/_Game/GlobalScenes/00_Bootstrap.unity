@@ -169,6 +169,7 @@ MonoBehaviour:
   _spawnPosition: {x: 0, y: 0}
   _sceneController: {fileID: 284295090}
   _walletReadSource: {fileID: 1727451413}
+  _playerCombatConfig: {fileID: 11400000, guid: dd3a0267a2c780a4a865514ab8367896, type: 2}
 --- !u!1 &239006183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,6 +1136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.Enemy::BillGameCore.Modules.Enemy.Presentation.EnemyView
   _spriteRenderer: {fileID: 1655914788}
+  _aliveColor: {r: 1, g: 1, b: 1, a: 1}
+  _hitColor: {r: 1, g: 0, b: 0, a: 1}
+  _hitFlashDuration: 0.08
 --- !u!4 &1655914786
 Transform:
   m_ObjectHideFlags: 0

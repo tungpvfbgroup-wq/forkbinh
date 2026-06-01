@@ -16,6 +16,7 @@ namespace BillGameCore.Scenes
         [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
         [SerializeField] private SceneController _sceneController;
         [SerializeField] private WalletReadSource _walletReadSource;
+        [SerializeField] private PlayerCombatConfig _playerCombatConfig;
         private PlayerRuntime _playerRuntime;
         private IWalletService _walletService;
         
@@ -37,7 +38,17 @@ namespace BillGameCore.Scenes
             _inputReader.SetCommandBuffer(commandBuffer);
             
             var inputCommandSource = new InputCommandDispatcher(commandBuffer);
-            var playerSpawner = new PlayerSpawner(_playerViewPrefab, _moveSpeed, inputCommandSource);
+            if (_playerCombatConfig == null)
+            {
+                throw new InvalidOperationException("SceneBootstrapper requires a PlayerCombatConfig reference.");
+            }
+            var playerSpawner = new PlayerSpawner(
+                _playerViewPrefab, 
+                _moveSpeed, 
+                inputCommandSource, 
+                _playerCombatConfig.AttackDamage,
+                _playerCombatConfig.AttackCooldown);
+
             _playerRuntime = playerSpawner.Spawn(_spawnPosition);
             _inputReader.SetControlledEntity(_playerRuntime.EntityId);
 

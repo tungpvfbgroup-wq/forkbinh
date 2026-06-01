@@ -15,27 +15,29 @@ namespace BillGameCore.Modules.Player.Presentation
         private BillEntityId _entityId;
         private IInteractable _currentInteractable;
         private IDamageReceiver _currentDamageReceiver;
+        private readonly float _attackDamage;
+        private readonly float _attackCooldown;
+        private float _nextAttackTime;
         public PlayerPresenter(PlayerView view, PlayerApplication application,
-            IInputCommandSource inputCommandSource, BillEntityId entityId)
+            IInputCommandSource inputCommandSource, BillEntityId entityId, float attackDamage, float attackCooldown)
         {
             _view = view;
             _application = application;
             _inputCommandSource = inputCommandSource;
             _entityId = entityId;
+            _attackDamage = attackDamage;
             _view.TriggerEnteredCallback = HandleTriggerEntered;
             _view.TriggerExitedCallback = HandleTriggerExited;
+            _attackCooldown = attackCooldown;
         }
         private void HandleTriggerEntered(Collider2D other)
         {
             var interactable = other.GetComponent<IInteractable>();
 
-            if (interactable == null)
+            if (interactable != null)
             {
-                return;
+                _currentInteractable = interactable;
             }
-
-            _currentInteractable = interactable;
-
             var damageReceiver = other.GetComponent<IDamageReceiver>();
             if (damageReceiver != null)
             {
@@ -46,16 +48,10 @@ namespace BillGameCore.Modules.Player.Presentation
         private void HandleTriggerExited(Collider2D other)
         {
             var interactable = other.GetComponent<IInteractable>();
-            if (interactable == null)
-            {
-                return;
-            }
-
-            if (_currentInteractable == interactable)
+            if (interactable != null && _currentInteractable == interactable)
             {
                 _currentInteractable = null;
             }
-
             var damageReceiver = other.GetComponent<IDamageReceiver>();
             if (damageReceiver != null && _currentDamageReceiver == damageReceiver)
             {
@@ -133,9 +129,17 @@ namespace BillGameCore.Modules.Player.Presentation
             {
                 return;
             }
-
-            var damageInfo = new DamageInfo(1f, _entityId, false);
-            _currentDamageReceiver.ReceiveDamage(damageInfo);
+            if (Time.time < _nextAttackTime)
+            {
+                return;
+            }
+            var damageInfo = new DamageInfo(_attackDamage, _entityId, false);
+            var result = _currentDamageReceiver.ReceiveDamage(damageInfo);
+            if (result.AppliedDamage <= 0f)
+            {
+                return;
+            }
+            _nextAttackTime = Time.time + _attackCooldown;
         }
         public Action OnDiedCallback { get; set; }
 
