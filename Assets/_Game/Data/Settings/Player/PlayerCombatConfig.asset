@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerCombatConfig
   m_EditorClassIdentifier: BillGameCore.Modules.Player::PlayerCombatConfig
   AttackDamage: 2
-  AttackCooldown: 0.5
+  AttackCooldown: 0.05

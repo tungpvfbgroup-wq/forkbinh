@@ -9,6 +9,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
     {
         [SerializeField] private EnemyConfig _config;
         [SerializeField] private EnemyView _view;
+        [SerializeField] private Collider2D _targetCollider;
         [SerializeField] private float _debugDamageAmount = 1f;
         private EnemyRuntime _runtime;
 
@@ -25,12 +26,16 @@ namespace BillGameCore.Modules.Enemy.Presentation
             {
                 throw new InvalidOperationException("EnemyDebugBinder requires an EnemyView reference.");
             }
+            if (_targetCollider == null)
+            {
+                throw new InvalidOperationException("EnemyDebugBinder requires a Collider2D reference.");
+            }
             BuildRuntime();
         }
         private void BuildRuntime()
         {
             _view.ShowAliveState();
-
+            _targetCollider.enabled = true;
             var enemySpawner = new EnemySpawner(_config);
             _runtime = enemySpawner.Spawn();
             _runtime.SetDiedCallback(HandleDied);
@@ -40,6 +45,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         private void HandleDied(RewardBundle reward)
         {
             _view.ShowDeadState();
+            _targetCollider.enabled = false;
             DiedCallback?.Invoke(reward);
         }
         public DamageResult ReceiveDamage(DamageInfo damageInfo)

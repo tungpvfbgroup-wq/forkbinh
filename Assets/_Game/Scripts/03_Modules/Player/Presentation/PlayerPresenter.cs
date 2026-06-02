@@ -14,10 +14,10 @@ namespace BillGameCore.Modules.Player.Presentation
         private readonly IInputCommandSource _inputCommandSource;
         private BillEntityId _entityId;
         private IInteractable _currentInteractable;
-        private IDamageReceiver _currentDamageReceiver;
         private readonly float _attackDamage;
         private readonly float _attackCooldown;
         private float _nextAttackTime;
+        private Vector2 _lastAttackDirection = Vector2.down;
         public PlayerPresenter(PlayerView view, PlayerApplication application,
             IInputCommandSource inputCommandSource, BillEntityId entityId, float attackDamage, float attackCooldown)
         {
@@ -29,6 +29,7 @@ namespace BillGameCore.Modules.Player.Presentation
             _view.TriggerEnteredCallback = HandleTriggerEntered;
             _view.TriggerExitedCallback = HandleTriggerExited;
             _attackCooldown = attackCooldown;
+            _view.SetAttackSensorDirection(_lastAttackDirection);
         }
         private void HandleTriggerEntered(Collider2D other)
         {
@@ -38,13 +39,7 @@ namespace BillGameCore.Modules.Player.Presentation
             {
                 _currentInteractable = interactable;
             }
-            var damageReceiver = other.GetComponent<IDamageReceiver>();
-            if (damageReceiver != null)
-            {
-                _currentDamageReceiver = damageReceiver;
-            }
         }
-
         private void HandleTriggerExited(Collider2D other)
         {
             var interactable = other.GetComponent<IInteractable>();
@@ -52,16 +47,10 @@ namespace BillGameCore.Modules.Player.Presentation
             {
                 _currentInteractable = null;
             }
-            var damageReceiver = other.GetComponent<IDamageReceiver>();
-            if (damageReceiver != null && _currentDamageReceiver == damageReceiver)
-            {
-                _currentDamageReceiver = null;
-            }
         }
         public void Tick()
         {
             IMoveCommand latestMoveCommand = null;
-
             while (_inputCommandSource.TryDequeue(out var command))
             {
                 if (command.ControlledEntityId != _entityId)
@@ -92,21 +81,22 @@ namespace BillGameCore.Modules.Player.Presentation
                 {
                     continue;
                 }
-
                 latestMoveCommand = moveCommand;
             }
-
             if (latestMoveCommand == null)
             {
                 return;
             }
-
             _application.ComputeMoveVelocity(
                 latestMoveCommand.DirX,
                 latestMoveCommand.DirY,
                 out float velocityX,
                 out float velocityY);
-
+            if (latestMoveCommand.IsMoving)
+            {
+                _lastAttackDirection = new Vector2(latestMoveCommand.DirX, latestMoveCommand.DirY);
+                _view.SetAttackSensorDirection(_lastAttackDirection);
+            }
             _view.SetMoveVelocity(new Vector2(velocityX, velocityY));
         }
         private void HandleInteractCommand(IInteractCommand interactCommand)
@@ -115,17 +105,21 @@ namespace BillGameCore.Modules.Player.Presentation
             {
                 return;
             }
-
             if (!_currentInteractable.CanInteract())
             {
                 return;
             }
-
             _currentInteractable.Interact();
         }
         private void HandleAttackCommand(IAttackCommand attackCommand)
         {
-            if (_currentDamageReceiver == null)
+            var attackSensor = _view.AttackSensor;
+            if (attackSensor == null)
+            {
+                throw new InvalidOperationException("PlayerView requires a PlayerAttackSensor reference for attack.");
+            }
+            var currentTarget = attackSensor.CurrentTarget;
+            if (currentTarget == null)
             {
                 return;
             }
@@ -134,7 +128,7 @@ namespace BillGameCore.Modules.Player.Presentation
                 return;
             }
             var damageInfo = new DamageInfo(_attackDamage, _entityId, false);
-            var result = _currentDamageReceiver.ReceiveDamage(damageInfo);
+            var result = currentTarget.ReceiveDamage(damageInfo);
             if (result.AppliedDamage <= 0f)
             {
                 return;
@@ -142,7 +136,6 @@ namespace BillGameCore.Modules.Player.Presentation
             _nextAttackTime = Time.time + _attackCooldown;
         }
         public Action OnDiedCallback { get; set; }
-
         public void Stop()
         {
             _view.SetMoveVelocity(Vector2.zero);

@@ -24,7 +24,6 @@ namespace BillGameCore.Scenes
             if (bundle.Gold > 0 || bundle.Experience > 0)
             {
                 Debug.Log($"Granted reward. Gold: {bundle.Gold}, Exp: {bundle.Experience}");
-
             }
         }
     }
