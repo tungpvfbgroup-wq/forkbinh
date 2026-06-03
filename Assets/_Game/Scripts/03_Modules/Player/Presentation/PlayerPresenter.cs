@@ -41,7 +41,7 @@ namespace BillGameCore.Modules.Player.Presentation
                 {
                     if (command is IInteractCommand interactCommand)
                     {
-                        HandleInteractCommand(interactCommand);
+                        HandleInteractCommand();
                     }
                     continue;
                 }
@@ -49,7 +49,7 @@ namespace BillGameCore.Modules.Player.Presentation
                 {
                     if (command is IAttackCommand attackCommand)
                     {
-                        HandleAttackCommand(attackCommand);
+                        HandleAttackCommand();
                     }
                     continue;
                 }
@@ -79,7 +79,7 @@ namespace BillGameCore.Modules.Player.Presentation
             }
             _view.SetMoveVelocity(new Vector2(velocityX, velocityY));
         }
-        private void HandleInteractCommand(IInteractCommand interactCommand)
+        private void HandleInteractCommand()
         {
             var interactSensor = _view.InteractSensor;
             if (interactSensor == null)
@@ -94,16 +94,15 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
 
-            if (currentTarget.CanInteract())
+            if (!currentTarget.CanInteract())
             {
                 return;
             }
 
             currentTarget.Interact();
-            return;
         }
     
-        private void HandleAttackCommand(IAttackCommand attackCommand)
+        private void HandleAttackCommand()
         {
             var attackSensor = _view.AttackSensor;
             if (attackSensor == null)

@@ -1,14 +1,11 @@
 using BillGameCore.Core.Combat;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 namespace BillGameCore.Modules.Player.Presentation
 {
     public sealed class PlayerAttackSensor : MonoBehaviour
     {
-        // public IDamageReceiver CurrentTarget { get; private set; }
         private readonly List<IDamageReceiver> _targets = new();
-
         public IDamageReceiver CurrentTarget
         {
             get
