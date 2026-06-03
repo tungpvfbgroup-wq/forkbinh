@@ -7,7 +7,7 @@ namespace BillGameCore.Modules.Player.Presentation
     {
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private PlayerAttackSensor _attackSensor;
-
+        [SerializeField] private PlayerInteractSensor _interactSensor;
         [SerializeField] private Vector3 _attackSensorUpOffset = new Vector3(0f, 0.3f, 0f);
         [SerializeField] private Vector3 _attackSensorDownOffset = new Vector3(0f, -0.3f, 0f);
         [SerializeField] private Vector3 _attackSensorLeftOffset = new Vector3(-0.3f, 0f, 0f);
@@ -17,6 +17,7 @@ namespace BillGameCore.Modules.Player.Presentation
         public Action<Collider2D> TriggerExitedCallback { get; set; }
         public Vector2 WorldPosition => _rigidbody2D.position;
         public PlayerAttackSensor AttackSensor => _attackSensor;
+        public PlayerInteractSensor InteractSensor => _interactSensor;
         private void OnTriggerEnter2D(Collider2D other)
         {
             TriggerEnteredCallback?.Invoke(other);

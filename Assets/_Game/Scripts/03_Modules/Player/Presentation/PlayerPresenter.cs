@@ -13,7 +13,6 @@ namespace BillGameCore.Modules.Player.Presentation
         private readonly PlayerApplication _application;
         private readonly IInputCommandSource _inputCommandSource;
         private BillEntityId _entityId;
-        private IInteractable _currentInteractable;
         private readonly float _attackDamage;
         private readonly float _attackCooldown;
         private float _nextAttackTime;
@@ -26,27 +25,8 @@ namespace BillGameCore.Modules.Player.Presentation
             _inputCommandSource = inputCommandSource;
             _entityId = entityId;
             _attackDamage = attackDamage;
-            _view.TriggerEnteredCallback = HandleTriggerEntered;
-            _view.TriggerExitedCallback = HandleTriggerExited;
             _attackCooldown = attackCooldown;
             _view.SetAttackSensorDirection(_lastAttackDirection);
-        }
-        private void HandleTriggerEntered(Collider2D other)
-        {
-            var interactable = other.GetComponent<IInteractable>();
-
-            if (interactable != null)
-            {
-                _currentInteractable = interactable;
-            }
-        }
-        private void HandleTriggerExited(Collider2D other)
-        {
-            var interactable = other.GetComponent<IInteractable>();
-            if (interactable != null && _currentInteractable == interactable)
-            {
-                _currentInteractable = null;
-            }
         }
         public void Tick()
         {
@@ -101,16 +81,28 @@ namespace BillGameCore.Modules.Player.Presentation
         }
         private void HandleInteractCommand(IInteractCommand interactCommand)
         {
-            if (_currentInteractable == null)
+            var interactSensor = _view.InteractSensor;
+            if (interactSensor == null)
+            {
+                throw new InvalidOperationException("PlayerView requires a PlayerInteractSensor reference for interaction.");
+            }
+
+            var currentTarget = interactSensor.CurrentTarget;
+            if (currentTarget == null)
             {
                 return;
             }
-            if (!_currentInteractable.CanInteract())
+
+
+            if (currentTarget.CanInteract())
             {
                 return;
             }
-            _currentInteractable.Interact();
+
+            currentTarget.Interact();
+            return;
         }
+    
         private void HandleAttackCommand(IAttackCommand attackCommand)
         {
             var attackSensor = _view.AttackSensor;
