@@ -119,57 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &232444279
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 232444281}
-  - component: {fileID: 232444282}
-  m_Layer: 0
-  m_Name: SceneBootstrapper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &232444281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 232444279}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.84423, y: 0.18316, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &232444282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 232444279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f44e2871a93e2848adad6ef03f297f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BillGameCore.Scenes::SceneBootstrapper1
-  _inputReader: {fileID: 1084239043}
-  _playerViewPrefab: {fileID: 6439526814168233900, guid: c2a0b62e20eba414d825ea5e9c19ba57, type: 3}
-  _moveSpeed: 5
-  _spawnPosition: {x: 0, y: 0}
-  _sceneController: {fileID: 284295090}
-  _walletReadSource: {fileID: 1727451413}
-  _playerCombatConfig: {fileID: 11400000, guid: dd3a0267a2c780a4a865514ab8367896, type: 2}
 --- !u!1 &239006183
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,6 +762,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &963745219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 963745221}
+  - component: {fileID: 963745220}
+  m_Layer: 0
+  m_Name: SceneScope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &963745220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963745219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7c43c18fc5846419c41e6be132dd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Scenes::BillGameCore.Scenes.BootstrapSceneLifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  _inputReader: {fileID: 1084239043}
+  _sceneController: {fileID: 284295090}
+  _walletReadSource: {fileID: 1727451413}
+  _playerViewPrefab: {fileID: 1070810134}
+  _playerConfig: {fileID: 11400000, guid: 263fcbf19d9821842bcb6e8b20850a7b, type: 2}
+--- !u!4 &963745221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963745219}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.63381, y: 0.92365, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1056146529
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,6 +952,17 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1070810134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6439526814168233900, guid: c2a0b62e20eba414d825ea5e9c19ba57, type: 3}
+  m_PrefabInstance: {fileID: 4758808066156714928}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43393d6c5c70f4649a494331539fdb89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Modules.Player::BillGameCore.Modules.Player.Presentation.PlayerView
 --- !u!1 &1084239042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,9 +1641,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 1056146532}
   - {fileID: 4758808066156714928}
-  - {fileID: 232444281}
-  - {fileID: 1084239044}
+  - {fileID: 963745221}
   - {fileID: 284295091}
+  - {fileID: 1084239044}
   - {fileID: 239006187}
   - {fileID: 1269343888}
   - {fileID: 2034631890}

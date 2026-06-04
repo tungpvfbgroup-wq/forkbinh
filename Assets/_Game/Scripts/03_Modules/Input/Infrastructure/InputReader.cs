@@ -1,9 +1,10 @@
+using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Input.Commands;
+using BillGameCore.SharedPorts.Input;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using BillGameCore.Core.ValueObjects;
-using BillGameCore.SharedPorts.Input;
+using VContainer;
 namespace BillGameCore.Modules.Input.Infrastructure
 {
     public sealed class InputReader : MonoBehaviour
@@ -50,9 +51,10 @@ namespace BillGameCore.Modules.Input.Infrastructure
         {
             _ = EnsureGateway();
         }
-        public void SetCommandBuffer(CommandBuffer commandBuffer)
+        [Inject]
+        public void Inject(CommandBuffer commandBuffer)
         {
-            _commandBuffer = commandBuffer;
+            _commandBuffer = commandBuffer ?? throw new ArgumentNullException(nameof(commandBuffer));
         }
         private void Update()
         {

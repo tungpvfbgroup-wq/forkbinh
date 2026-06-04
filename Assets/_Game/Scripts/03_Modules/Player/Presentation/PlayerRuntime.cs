@@ -5,13 +5,18 @@ namespace BillGameCore.Modules.Player.Presentation
 {
     public sealed class PlayerRuntime : IDisposable
     {
-        private readonly PlayerPresenter _presenter;
         private bool _isDisposed;
-        public BillEntityId EntityId { get; }
+        public PlayerPresenter Presenter { get; }
+        public BillEntityId Id { get; }
         public PlayerRuntime(PlayerPresenter presenter, BillEntityId entityId)
         {
-            _presenter = presenter;
-            EntityId = entityId;
+            Presenter = presenter ?? throw new ArgumentNullException(nameof(presenter));
+
+            if (!entityId.IsValid)
+            {
+                throw new ArgumentException("PlayerRuntime requires a valid entity id.", nameof(entityId));
+            }
+            Id = entityId;
         }
 
         public void Tick ()    
@@ -21,14 +26,8 @@ namespace BillGameCore.Modules.Player.Presentation
                 return;
             }
 
-            _presenter.Tick(); 
+            Presenter.Tick(); 
         }
-
-        public void SetOnDiedCallback(Action onDiedCallback)
-        {
-            _presenter.OnDiedCallback = onDiedCallback;
-        }
-
         public void Dispose()
         {
             if (_isDisposed)
@@ -37,7 +36,7 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
             _isDisposed = true;
-            _presenter.Stop();
+            Presenter.Stop();
         }
     }
 }

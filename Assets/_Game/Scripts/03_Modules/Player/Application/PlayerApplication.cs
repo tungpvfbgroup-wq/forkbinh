@@ -1,14 +1,16 @@
 using System;
-
+using BillGameCore.Modules.Player.Domain;
 namespace BillGameCore.Modules.Player.Application
 {
     public sealed class PlayerApplication
     {
-        private readonly float _moveSpeed;
-
-        public PlayerApplication(float moveSpeed)
+        //  private readonly float _moveSpeed;
+        private readonly PlayerDefinition _definition;
+        private readonly PlayerState _state;
+        public PlayerApplication(PlayerDefinition definition, PlayerState state)
         {
-            _moveSpeed = moveSpeed;
+            _definition = definition ?? throw new ArgumentNullException(nameof(definition));
+            _state = state ?? throw new ArgumentNullException(nameof(state));
         }
 
         public void ComputeMoveVelocity(
@@ -26,8 +28,10 @@ namespace BillGameCore.Modules.Player.Application
                 inputY /= magnitude;
             }
 
-            velocityX = inputX * _moveSpeed;
-            velocityY = inputY * _moveSpeed;
+            velocityX = inputX * _definition.MoveSpeed;
+            velocityY = inputY * _definition.MoveSpeed;
+
+            _state.SetMoveVelocity(velocityX, velocityY);
         }
     }
 }

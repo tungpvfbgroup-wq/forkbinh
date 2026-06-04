@@ -1,86 +1,51 @@
-using BillGameCore.Modules.Input.Application;
-using BillGameCore.Modules.Input.Commands;
-using BillGameCore.Modules.Input.Infrastructure;
-using BillGameCore.Modules.Player.Presentation;
-using BillGameCore.SharedPorts.Input;
-using BillGameCore.SharedPorts.Economy;
 using System;
 using UnityEngine;
+using VContainer.Unity;
+using BillGameCore.SharedPorts.Economy;
+using BillGameCore.Modules.Player.Presentation;
+using BillGameCore.Modules.Input.Infrastructure;
 namespace BillGameCore.Scenes
-{
-    public sealed class SceneBootstrapper : MonoBehaviour
+{ 
+    public sealed class SceneBootstrapper : IStartable, ITickable, IDisposable
     {
-        [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
-
-
-        [SerializeField] private InputReader _inputReader; //
-        [SerializeField] private PlayerView _playerViewPrefab;//
-        [SerializeField] private float _moveSpeed = 5f;//
-        [SerializeField] private SceneController _sceneController;//
-        [SerializeField] private WalletReadSource _walletReadSource;//
-        [SerializeField] private PlayerCombatConfig _playerCombatConfig;//
-
-
+        private readonly InputReader _inputReader;
+        private readonly PlayerSpawner _playerSpawner;
+        private readonly SceneController _sceneController;
+        private readonly WalletReadSource _walletReadSource;
+        private readonly IWalletService _walletService;
+        private readonly IRewardGrantService _rewardGrantService;
         private PlayerRuntime _playerRuntime;
-        private IWalletService _walletService;
-        
-        [ContextMenu("Debug/Switch Context To Player")]
-        private void DebugSwitchContextToPlayer()
+        public SceneBootstrapper(
+            InputReader inputReader,
+            PlayerSpawner playerSpawner,
+            SceneController sceneController,
+            WalletReadSource walletReadSource,
+            IWalletService walletService,
+            IRewardGrantService rewardGrantService)
         {
-            _inputReader.SwitchContext(InputContext.Player);
+            _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
+            _playerSpawner = playerSpawner ?? throw new ArgumentNullException(nameof(playerSpawner));
+            _sceneController = sceneController ?? throw new ArgumentNullException(nameof(sceneController));
+            _walletReadSource = walletReadSource ?? throw new ArgumentNullException(nameof(walletReadSource));
+            _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
+            _rewardGrantService = rewardGrantService ?? throw new ArgumentNullException(nameof(rewardGrantService));
         }
-
-        [ContextMenu("Debug/Switch Context To UI")]
-        private void DebugSwitchContextToUI()
+        public void Start()
         {
-            _inputReader.SwitchContext(InputContext.UI);
-        }
-
-        private void Awake()
-        {
-            var commandBuffer = new CommandBuffer(32);
-            _inputReader.SetCommandBuffer(commandBuffer);
-            
-            var inputCommandSource = new InputCommandDispatcher(commandBuffer);
-            if (_playerCombatConfig == null)
-            {
-                throw new InvalidOperationException("SceneBootstrapper requires a PlayerCombatConfig reference.");
-            }
-            var playerSpawner = new PlayerSpawner(
-                _playerViewPrefab, 
-                _moveSpeed, 
-                inputCommandSource, 
-                _playerCombatConfig.AttackDamage,
-                _playerCombatConfig.AttackCooldown);
-
-            _playerRuntime = playerSpawner.Spawn(_spawnPosition);
-            _inputReader.SetControlledEntity(_playerRuntime.EntityId);
-
-            _playerRuntime.SetOnDiedCallback(_sceneController.HandlePlayerDied); 
-
-            if (_sceneController == null)
-            { throw new InvalidOperationException("SceneBootstrapper requires a SceneController reference."); }
-           var walletService = new WalletService();
-            _walletService = walletService;
-            var rewardGrantService = new RewardGrantService(walletService);
-
-            if (_walletReadSource == null)
-            {
-                throw new InvalidOperationException("SceneBootstrapper requires a WalletReadSource reference.");
-            }
-
+            _playerRuntime = _playerSpawner.Spawn(Vector2.zero);
+            _inputReader.SetControlledEntity(_playerRuntime.Id);
+            _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
             _walletReadSource.SetWalletService(_walletService);
-            _sceneController.SetRewardGrantService(rewardGrantService);
+            _sceneController.SetRewardGrantService(_rewardGrantService);
         }
-
-        private void Update()
+        public void Tick()
         {
-            _playerRuntime.Tick();
+            _playerRuntime?.Tick();
         }
-
-        private void OnDestroy()
+        public void Dispose()
         {
             _playerRuntime?.Dispose();
+            _playerRuntime = null;
         }
     }
 }

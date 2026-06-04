@@ -1,35 +1,45 @@
-using BillGameCore.Modules.Player.Application;
-using BillGameCore.SharedPorts.Input;
-using UnityEngine;
 using BillGameCore.Core.ValueObjects;
+using BillGameCore.Modules.Player.Application;
+using BillGameCore.Modules.Player.Domain;
+using BillGameCore.Modules.Player.Infrastructure.Config;
+using BillGameCore.SharedPorts.Input;
+using System;
+using UnityEngine;
 namespace BillGameCore.Modules.Player.Presentation
 {
     public sealed class PlayerSpawner
     {
         private readonly PlayerView _playerViewPrefab;
-        private readonly float _moveSpeed;
         private readonly IInputCommandSource _inputCommandSource;
-        private readonly float _attackDamage;
-        private readonly float _attackCooldown;
-
-        public PlayerSpawner(PlayerView playerViewPrefab, float moveSpeed,
-            IInputCommandSource inputCommandSource, float attackDamage, float attackCooldown)
+        private readonly PlayerConfig _playerConfig;
+        public PlayerSpawner
+           (PlayerView playerViewPrefab,
+            PlayerConfig playerConfig,
+            IInputCommandSource inputCommandSource
+            )
         {
-            _playerViewPrefab = playerViewPrefab;
-            _moveSpeed = moveSpeed;
-            _inputCommandSource = inputCommandSource;
-            _attackDamage = attackDamage;
-            _attackCooldown = attackCooldown;
+            _playerViewPrefab = playerViewPrefab ?? throw new ArgumentNullException(nameof(playerViewPrefab));
+            _playerConfig = playerConfig ?? throw new ArgumentNullException(nameof(playerConfig));
+            _inputCommandSource = inputCommandSource ?? throw new ArgumentNullException(nameof(inputCommandSource));
         }
 
         public PlayerRuntime Spawn(Vector2 spawnPosition)
         {
-            var playerView = Object.Instantiate(_playerViewPrefab, spawnPosition, Quaternion.identity);
+            var playerView = UnityEngine.Object.Instantiate(_playerViewPrefab, spawnPosition, Quaternion.identity);
 
             var entityId = BillEntityId.New();
-            
-            var application = new PlayerApplication(_moveSpeed);
-            var presenter = new PlayerPresenter(playerView, application, _inputCommandSource, entityId, _attackDamage, _attackCooldown);
+
+            var definition = _playerConfig.ToDefinition();
+            var state = new PlayerState();
+
+            var application = new PlayerApplication(definition, state);
+            var presenter = new PlayerPresenter(
+                                           playerView,
+                                           application,
+                                           _inputCommandSource,
+                                           entityId,
+                                           definition.AttackDamage,
+                                           definition.AttackCooldown);
 
             var runtime = new PlayerRuntime(presenter, entityId);
 
