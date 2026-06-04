@@ -10,13 +10,17 @@ namespace BillGameCore.Scenes
 {
     public sealed class SceneBootstrapper : MonoBehaviour
     {
-        [SerializeField] private InputReader _inputReader;
-        [SerializeField] private PlayerView _playerViewPrefab;
-        [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private Vector2 _spawnPosition = Vector2.zero;
-        [SerializeField] private SceneController _sceneController;
-        [SerializeField] private WalletReadSource _walletReadSource;
-        [SerializeField] private PlayerCombatConfig _playerCombatConfig;
+
+
+        [SerializeField] private InputReader _inputReader; //
+        [SerializeField] private PlayerView _playerViewPrefab;//
+        [SerializeField] private float _moveSpeed = 5f;//
+        [SerializeField] private SceneController _sceneController;//
+        [SerializeField] private WalletReadSource _walletReadSource;//
+        [SerializeField] private PlayerCombatConfig _playerCombatConfig;//
+
+
         private PlayerRuntime _playerRuntime;
         private IWalletService _walletService;
         
