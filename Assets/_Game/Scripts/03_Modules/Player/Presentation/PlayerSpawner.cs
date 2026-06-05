@@ -42,7 +42,14 @@ namespace BillGameCore.Modules.Player.Presentation
                                            definition.AttackCooldown);
 
             var runtime = new PlayerRuntime(presenter, entityId);
+            var combatReceiver = playerView.GetComponent<PlayerCombatReceiver>();
 
+            if (combatReceiver == null)
+            {
+                throw new InvalidOperationException("PlayerView prefab requires a PlayerCombatReceiver component on the root GameObject.");
+            }
+
+            combatReceiver.Bind(runtime);
             return runtime;
         }
     }

@@ -174,6 +174,7 @@ GameObject:
   - component: {fileID: 497126530874415761}
   - component: {fileID: 5845696541798677015}
   - component: {fileID: 6439526814168233900}
+  - component: {fileID: 2657578850537872368}
   - component: {fileID: 3670076140373497837}
   m_Layer: 0
   m_Name: PlayerView.prefab
@@ -304,6 +305,18 @@ MonoBehaviour:
   _attackSensorDownOffset: {x: 0, y: -0.3, z: 0}
   _attackSensorLeftOffset: {x: -0.3, y: 0, z: 0}
   _attackSensorRightOffset: {x: 0.3, y: 0, z: 0}
+--- !u!114 &2657578850537872368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584923382521726840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c2480db7287034d8d2d4f453eab703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BillGameCore.Modules.Player::BillGameCore.Modules.Player.Presentation.PlayerCombatReceiver
 --- !u!58 &3670076140373497837
 CircleCollider2D:
   m_ObjectHideFlags: 0

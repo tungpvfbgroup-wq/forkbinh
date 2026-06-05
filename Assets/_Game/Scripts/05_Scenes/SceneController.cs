@@ -12,7 +12,7 @@ namespace BillGameCore.Scenes
     public sealed class SceneController : MonoBehaviour
     {
         [SerializeField] private ChestBinder[] _chestBinders;
-        [SerializeField] private EnemyDebugBinder[] _enemyDebugBinders;
+        [SerializeField] private EnemyBinder[] _enemyBinders;
         private IRewardGrantService _rewardGrantService;
         private void Awake()
         {
@@ -30,21 +30,21 @@ namespace BillGameCore.Scenes
                     chestBinder.OpenedCallback = HandleChestOpened;
             }
 
-            if (_enemyDebugBinders == null || _enemyDebugBinders.Length == 0)
+            if (_enemyBinders == null || _enemyBinders.Length == 0)
             {
                 return;
             }
 
-            for (int i = 0; i < _enemyDebugBinders.Length; i++)
+            for (int i = 0; i < _enemyBinders.Length; i++)
             {
-                var enemyDebugBinder = _enemyDebugBinders[i];
+                var enemyBinder = _enemyBinders[i];
 
-                if (enemyDebugBinder == null)
+                if (enemyBinder == null)
                 {
-                    throw new InvalidOperationException($"SceneController has a null EnemyDebugBinder at index {i}.");
+                    throw new InvalidOperationException($"SceneController has a null EnemyBinder at index {i}.");
                 }
 
-                enemyDebugBinder.DiedCallback = HandleEnemyDied;
+                enemyBinder.DiedCallback = HandleEnemyDied;
             }
         }
         public void SetRewardGrantService(IRewardGrantService rewardGrantService)
