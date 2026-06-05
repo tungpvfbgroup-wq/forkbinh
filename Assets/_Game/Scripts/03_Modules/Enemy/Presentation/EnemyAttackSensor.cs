@@ -50,7 +50,12 @@ namespace BillGameCore.Modules.Enemy.Presentation
         }
         private void OnTriggerEnter2D(Collider2D other)
         {
-            var target = other.GetComponentInParent<IDamageReceiver>();
+            if (other.isTrigger)
+            {
+                return;
+            }
+
+            var target = other.GetComponent<IDamageReceiver>();
 
             if (target == null)
             {
@@ -66,11 +71,18 @@ namespace BillGameCore.Modules.Enemy.Presentation
         }
         private void OnTriggerExit2D(Collider2D other)
         {
-            var target = other.GetComponentInParent<IDamageReceiver>();
+            if (other.isTrigger)
+            {
+                return;
+            }
+
+            var target = other.GetComponent<IDamageReceiver>();
+
             if (target == null)
             {
                 return;
             }
+
             _targets.Remove(target);
         }
     }

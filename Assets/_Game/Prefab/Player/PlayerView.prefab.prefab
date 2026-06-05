@@ -298,6 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43393d6c5c70f4649a494331539fdb89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.Player::BillGameCore.Modules.Player.Presentation.PlayerView
+  _spriteRenderer: {fileID: 5845696541798677015}
+  _bodyCollider: {fileID: 3670076140373497837}
   _rigidbody2D: {fileID: 497126530874415761}
   _attackSensor: {fileID: 6826782908492486428}
   _interactSensor: {fileID: 7923770461141019594}

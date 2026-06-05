@@ -21,7 +21,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         }
         public void ShowDeadState()
         {
-            _spriteRenderer.enabled = true;
+           // _spriteRenderer.enabled = true;
             _spriteRenderer.color = Color.gray;
         }
         public void ShowAliveState()

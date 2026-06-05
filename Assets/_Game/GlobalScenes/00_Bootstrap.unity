@@ -727,7 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1490a3233726343ab0ad0a720a24c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.Enemy::BillGameCore.Modules.Enemy.Presentation.EnemyDebugBinder
-  _config: {fileID: 11400000, guid: 9fcdfa14a9c3f634f90bd6bd553e263f, type: 2}
+  _config: {fileID: 11400000, guid: 26c8e2110c16a05409e06c54d8967f46, type: 2}
   _view: {fileID: 779817480}
   _targetCollider: {fileID: 779817477}
   _attackSensor: {fileID: 1376844351}

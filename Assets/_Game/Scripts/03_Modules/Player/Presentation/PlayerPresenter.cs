@@ -17,6 +17,7 @@ namespace BillGameCore.Modules.Player.Presentation
         private readonly float _attackCooldown;
         private float _nextAttackTime;
         private Vector2 _lastAttackDirection = Vector2.down;
+        private bool _isDead;
         public Action<BillEntityId, RewardBundle, Vector2> OnDiedCallback { get; set; }
 
         public PlayerPresenter(PlayerView view, PlayerApplication application,
@@ -49,6 +50,10 @@ namespace BillGameCore.Modules.Player.Presentation
         }
         public void Tick()
         {
+            if (_isDead)
+            {
+                return;
+            }
             IMoveCommand latestMoveCommand = null;
             while (_inputCommandSource.TryDequeue(out var command))
             {
@@ -94,6 +99,12 @@ namespace BillGameCore.Modules.Player.Presentation
 
         private void HandleDied(BillEntityId playerId, RewardBundle reward)
         {
+            if (_isDead)
+            {
+                return;
+            }
+            _isDead = true;
+            _view.SetDeadState();
             Stop();
             OnDiedCallback?.Invoke(playerId, reward, _view.WorldPosition);
         }

@@ -1,4 +1,5 @@
 
+using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Enemy.Application;
 using BillGameCore.Modules.Enemy.Domain;
 
@@ -17,7 +18,8 @@ namespace BillGameCore.Modules.Enemy.Presentation
             var state = new EnemyState(definition);
             var application = new EnemyApplication(definition, state);
             var presenter = new EnemyPresenter(application);
-            var runtime = new EnemyRuntime(presenter);
+            var entityId = BillEntityId.New();
+            var runtime = new EnemyRuntime(presenter, entityId);
             return runtime;
         }
     }

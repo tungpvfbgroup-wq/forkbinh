@@ -53,6 +53,11 @@ namespace BillGameCore.Scenes
         }
         public void HandlePlayerDied(BillEntityId playerId, RewardBundle reward, Vector2 deathWorldPosition)
         {
+            Debug.Log(
+                $"<color=#ff3333><b>[PLAYER DIED]</b></color> Id: <color=#00ffffff><b>{playerId}</b></color> | " +
+                $"Reward Gold: <color=#ffff00><b>{reward.Gold}</b></color> | " +
+                $"Reward Exp: <color=#ff00ff><b>{reward.Experience}</b></color> | " +
+                $"Position: <color=#7fff00>{deathWorldPosition}</color>");
         }
         public void HandleEnemyDied(RewardBundle reward)
         {

@@ -5,6 +5,7 @@ namespace BillGameCore.Modules.Player.Presentation
 {
     public sealed class PlayerView : MonoBehaviour
     {
+       
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private PlayerAttackSensor _attackSensor;
         [SerializeField] private PlayerInteractSensor _interactSensor;
@@ -52,7 +53,44 @@ namespace BillGameCore.Modules.Player.Presentation
 
         public void SetMoveVelocity(Vector2 velocity)
         {
+            if (_rigidbody2D == null)
+            {
+                return;
+            }
             _rigidbody2D.linearVelocity = velocity;
+        }
+        public void SetDeadState()
+        {
+            if (_rigidbody2D == null)
+            {
+                return;
+            }
+            _rigidbody2D.linearVelocity = Vector2.zero;
+            var bodyCollider = GetComponent<Collider2D>();
+            if (bodyCollider != null)
+            {
+                bodyCollider.enabled = false;
+            }
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {  
+                spriteRenderer.color = Color.gray;
+            }
+            var combatReceiver = GetComponent<PlayerCombatReceiver>();
+            if (combatReceiver != null)
+            {
+                combatReceiver.enabled = false;
+            }
+
+            if (_attackSensor != null)
+            {
+                _attackSensor.gameObject.SetActive(false);
+            }
+
+            if (_interactSensor != null)
+            {
+                _interactSensor.gameObject.SetActive(false);
+            }
         }
     }
 }

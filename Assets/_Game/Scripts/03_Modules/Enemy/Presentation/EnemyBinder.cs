@@ -78,15 +78,18 @@ namespace BillGameCore.Modules.Enemy.Presentation
                 return;
             }
 
-            var damageInfo = new DamageInfo(_config.AttackDamage, BillEntityId.Invalid, false);
+            var damageInfo = new DamageInfo(_config.AttackDamage, _runtime.Id, false);
             var result = target.ReceiveDamage(damageInfo);
+
+            _nextAttackTime = Time.time + _config.AttackCooldown;
+
+            Debug.Log(
+                $"Enemy attack result. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
 
             if (result.AppliedDamage <= 0f)
             {
                 return;
             }
-
-            _nextAttackTime = Time.time + _config.AttackCooldown;
         }
         private void HandleDied(RewardBundle reward)
         {
