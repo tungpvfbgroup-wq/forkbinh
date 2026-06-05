@@ -1,5 +1,5 @@
 using BillGameCore.Core.Combat;
-using BillGameCore.Core.Interaction;
+using BillGameCore.Core.Rewards;
 using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Player.Application;
 using BillGameCore.SharedPorts.Input;
@@ -12,55 +12,67 @@ namespace BillGameCore.Modules.Player.Presentation
         private readonly PlayerView _view;
         private readonly PlayerApplication _application;
         private readonly IInputCommandSource _inputCommandSource;
-        private BillEntityId _entityId;
+        private BillEntityId _controlledEntityId;
         private readonly float _attackDamage;
         private readonly float _attackCooldown;
         private float _nextAttackTime;
         private Vector2 _lastAttackDirection = Vector2.down;
+        public Action<BillEntityId, RewardBundle, Vector2> OnDiedCallback { get; set; }
+
         public PlayerPresenter(PlayerView view, PlayerApplication application,
             IInputCommandSource inputCommandSource, BillEntityId entityId, float attackDamage, float attackCooldown)
         {
-            _view = view;
-            _application = application;
-            _inputCommandSource = inputCommandSource;
-            _entityId = entityId;
+            _view = view ?? throw new ArgumentNullException(nameof(view));
+            _application = application ?? throw new ArgumentNullException(nameof(application));
+            _inputCommandSource = inputCommandSource ?? throw new ArgumentNullException(nameof(inputCommandSource));
+
+            if (!entityId.IsValid)
+            {
+                throw new ArgumentException("PlayerPresenter requires a valid entity id.", nameof(entityId));
+            }
+
+            if (attackDamage < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(attackDamage), "PlayerPresenter requires attackDamage >= 0.");
+            }
+
+            if (attackCooldown < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(attackCooldown), "PlayerPresenter requires attackCooldown >= 0.");
+            }
+
+            _controlledEntityId = entityId;
             _attackDamage = attackDamage;
             _attackCooldown = attackCooldown;
             _view.SetAttackSensorDirection(_lastAttackDirection);
+            _application.DiedCallback = HandleDied;
         }
         public void Tick()
         {
             IMoveCommand latestMoveCommand = null;
             while (_inputCommandSource.TryDequeue(out var command))
             {
-                if (command.ControlledEntityId != _entityId)
+                if (command.ControlledEntityId != _controlledEntityId)
                 {
                     continue;
                 }
-                if (command.Type == CommandType.Interact)
+                if (command is IInteractCommand)
                 {
-                    if (command is IInteractCommand interactCommand)
-                    {
-                        HandleInteractCommand();
-                    }
+                    HandleInteractCommand();
                     continue;
                 }
-                if (command.Type == CommandType.Attack)
+
+                if (command is IAttackCommand)
                 {
-                    if (command is IAttackCommand attackCommand)
-                    {
-                        HandleAttackCommand();
-                    }
+                    HandleAttackCommand();
                     continue;
                 }
-                if (command.Type != CommandType.Move)
-                {
-                    continue;
-                }
+
                 if (command is not IMoveCommand moveCommand)
                 {
                     continue;
                 }
+
                 latestMoveCommand = moveCommand;
             }
             if (latestMoveCommand == null)
@@ -79,6 +91,13 @@ namespace BillGameCore.Modules.Player.Presentation
             }
             _view.SetMoveVelocity(new Vector2(velocityX, velocityY));
         }
+
+        private void HandleDied(BillEntityId playerId, RewardBundle reward)
+        {
+            Stop();
+            OnDiedCallback?.Invoke(playerId, reward, _view.WorldPosition);
+        }
+
         private void HandleInteractCommand()
         {
             var interactSensor = _view.InteractSensor;
@@ -118,7 +137,7 @@ namespace BillGameCore.Modules.Player.Presentation
             {
                 return;
             }
-            var damageInfo = new DamageInfo(_attackDamage, _entityId, false);
+            var damageInfo = new DamageInfo(_attackDamage, _controlledEntityId, false);
             var result = currentTarget.ReceiveDamage(damageInfo);
             if (result.AppliedDamage <= 0f)
             {
@@ -126,7 +145,10 @@ namespace BillGameCore.Modules.Player.Presentation
             }
             _nextAttackTime = Time.time + _attackCooldown;
         }
-        public Action OnDiedCallback { get; set; }
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
+        {
+            return _application.ReceiveDamage(damageInfo);
+        }
         public void Stop()
         {
             _view.SetMoveVelocity(Vector2.zero);

@@ -5,6 +5,7 @@ using BillGameCore.SharedPorts.Economy;
 using BillGameCore.Modules.Enemy.Presentation;
 using System;
 using UnityEngine;
+using BillGameCore.Core.ValueObjects;
 namespace BillGameCore.Scenes
 {
     
@@ -50,7 +51,7 @@ namespace BillGameCore.Scenes
         {
             _rewardGrantService = rewardGrantService;
         }
-        public void HandlePlayerDied()
+        public void HandlePlayerDied(BillEntityId playerId, RewardBundle reward, Vector2 deathWorldPosition)
         {
         }
         public void HandleEnemyDied(RewardBundle reward)

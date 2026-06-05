@@ -1,3 +1,4 @@
+using BillGameCore.Core.Combat;
 using BillGameCore.Core.ValueObjects;
 using System;
 
@@ -27,6 +28,15 @@ namespace BillGameCore.Modules.Player.Presentation
             }
 
             Presenter.Tick(); 
+        }
+        public DamageResult ReceiveDamage(DamageInfo damageInfo)
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException(nameof(PlayerRuntime));
+            }
+
+            return Presenter.ReceiveDamage(damageInfo);
         }
         public void Dispose()
         {

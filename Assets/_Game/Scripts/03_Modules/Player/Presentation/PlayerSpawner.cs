@@ -30,9 +30,9 @@ namespace BillGameCore.Modules.Player.Presentation
             var entityId = BillEntityId.New();
 
             var definition = _playerConfig.ToDefinition();
-            var state = new PlayerState();
+            var state = new PlayerState(definition.MaxHealth);
 
-            var application = new PlayerApplication(definition, state);
+            var application = new PlayerApplication(entityId, definition, state);
             var presenter = new PlayerPresenter(
                                            playerView,
                                            application,

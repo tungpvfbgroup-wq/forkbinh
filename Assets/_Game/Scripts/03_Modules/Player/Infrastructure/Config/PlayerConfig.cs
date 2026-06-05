@@ -8,6 +8,9 @@ namespace BillGameCore.Modules.Player.Infrastructure.Config
         menuName = "BillGameCore/Player/PlayerConfig")]
     public sealed class PlayerConfig : ScriptableObject
     {
+        [field: SerializeField, Min(0.01f)]
+        public float MaxHealth { get; private set; } = 10f;
+
         [field: SerializeField, Min(0f)]
         public float MoveSpeed { get; private set; } = 5f;
 
@@ -19,7 +22,7 @@ namespace BillGameCore.Modules.Player.Infrastructure.Config
 
         public PlayerDefinition ToDefinition()
         {
-            return new PlayerDefinition(MoveSpeed, AttackDamage, AttackCooldown);
+            return new PlayerDefinition(MaxHealth, MoveSpeed, AttackDamage, AttackCooldown);
         }
     }
 }
