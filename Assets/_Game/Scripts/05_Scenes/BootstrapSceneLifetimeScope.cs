@@ -9,6 +9,7 @@ using BillGameCore.Modules.Player.Presentation;
 using BillGameCore.SharedPorts.Economy;
 using BillGameCore.SharedPorts.Input;
 using BillGameCore.Modules.Player.Infrastructure.Config;
+using BillGameCore.Modules.Enemy.Presentation;
 namespace BillGameCore.Scenes
 {
     public sealed class BootstrapSceneLifetimeScope : LifetimeScope
@@ -55,7 +56,7 @@ namespace BillGameCore.Scenes
             builder.Register<IRewardGrantService>(
                 resolver => new RewardGrantService(resolver.Resolve<IWalletWriteService>()),
                 Lifetime.Scoped);
-
+            builder.Register<EnemyRuntimeFactory>(Lifetime.Scoped);
             builder.RegisterEntryPoint<SceneBootstrapper>(Lifetime.Scoped);
         }
 

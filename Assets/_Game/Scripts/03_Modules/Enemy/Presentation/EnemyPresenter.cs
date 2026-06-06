@@ -5,7 +5,7 @@ using System;
 using BillGameCore.Core.Combat;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
-    public class EnemyPresenter
+    public class EnemyPresenter : IDisposable
     {
         private readonly EnemyApplication _application;
         public Action<RewardBundle> DiedCallback { get; set; }
@@ -25,6 +25,12 @@ namespace BillGameCore.Modules.Enemy.Presentation
         private void HandleDied(RewardBundle reward)
         {
             DiedCallback?.Invoke(reward);
+        }
+
+        public void Dispose()
+        {
+            _application.DiedCallback -= HandleDied;
+            DiedCallback = null;
         }
     }
 }

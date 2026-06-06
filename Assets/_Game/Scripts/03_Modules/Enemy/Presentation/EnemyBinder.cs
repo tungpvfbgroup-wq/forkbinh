@@ -12,6 +12,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         [SerializeField] private Collider2D _targetCollider;
         [SerializeField] private EnemyAttackSensor _attackSensor;
         [SerializeField] private float _debugDamageAmount = 1f;
+        public EnemyConfig Config => _config;
         private EnemyRuntime _runtime;
         private float _nextAttackTime;
         public Action<BillEntityId, RewardBundle, Vector2> DiedCallback { get; set; }
@@ -35,16 +36,20 @@ namespace BillGameCore.Modules.Enemy.Presentation
             {
                 throw new InvalidOperationException("EnemyBinder requires an EnemyAttackSensor reference.");
             }
-            BuildRuntime();
         }
-        private void BuildRuntime()
+        public void InitializeRuntime(EnemyRuntime runtime)
         {
+            if (runtime == null)
+            {
+                throw new ArgumentNullException(nameof(runtime));
+            }
+            _runtime?.Dispose();
+            _runtime = null;
             _view.ShowAliveState();
             _targetCollider.enabled = true;
             _attackSensor.gameObject.SetActive(true);
             _nextAttackTime = 0f;
-            var enemySpawner = new EnemySpawner(_config);
-            _runtime = enemySpawner.Spawn();
+            _runtime = runtime;
             _runtime.SetDiedCallback(HandleDied);
             var health = _runtime.GetHealth();
             Debug.Log($"Enemy runtime ready. Health: {health.CurrentHealth}, IsDead: {health.IsDead}");
@@ -119,11 +124,15 @@ namespace BillGameCore.Modules.Enemy.Presentation
 
             return result;
         }
-
+        private void OnDestroy()
+        {
+            _runtime?.Dispose();
+            _runtime = null;
+        }
         [ContextMenu("Debug/Reset Enemy")]
         private void DebugResetEnemy()
         {
-            BuildRuntime();
+            InitializeRuntime(new EnemyRuntimeFactory().Create(_config));
         }
         [ContextMenu("Debug/Apply Damage")]
         private void DebugApplyDamage()

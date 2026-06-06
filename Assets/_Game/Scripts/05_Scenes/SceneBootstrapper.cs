@@ -1,9 +1,10 @@
+using BillGameCore.Modules.Enemy.Presentation;
+using BillGameCore.Modules.Input.Infrastructure;
+using BillGameCore.Modules.Player.Presentation;
+using BillGameCore.SharedPorts.Economy;
 using System;
 using UnityEngine;
 using VContainer.Unity;
-using BillGameCore.SharedPorts.Economy;
-using BillGameCore.Modules.Player.Presentation;
-using BillGameCore.Modules.Input.Infrastructure;
 namespace BillGameCore.Scenes
 { 
     public sealed class SceneBootstrapper : IStartable, ITickable, IDisposable
@@ -12,14 +13,18 @@ namespace BillGameCore.Scenes
         private readonly PlayerSpawner _playerSpawner;
         private readonly SceneController _sceneController;
         private readonly WalletReadSource _walletReadSource;
+        private readonly EnemyRuntimeFactory _enemyRuntimeFactory;
         private readonly IWalletService _walletService;
         private readonly IRewardGrantService _rewardGrantService;
+
         private PlayerRuntime _playerRuntime;
+
         public SceneBootstrapper(
             InputReader inputReader,
             PlayerSpawner playerSpawner,
             SceneController sceneController,
             WalletReadSource walletReadSource,
+            EnemyRuntimeFactory enemyRuntimeFactory,
             IWalletService walletService,
             IRewardGrantService rewardGrantService)
         {
@@ -27,6 +32,7 @@ namespace BillGameCore.Scenes
             _playerSpawner = playerSpawner ?? throw new ArgumentNullException(nameof(playerSpawner));
             _sceneController = sceneController ?? throw new ArgumentNullException(nameof(sceneController));
             _walletReadSource = walletReadSource ?? throw new ArgumentNullException(nameof(walletReadSource));
+            _enemyRuntimeFactory = enemyRuntimeFactory ?? throw new ArgumentNullException(nameof(enemyRuntimeFactory));
             _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             _rewardGrantService = rewardGrantService ?? throw new ArgumentNullException(nameof(rewardGrantService));
         }
@@ -38,6 +44,7 @@ namespace BillGameCore.Scenes
             _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
             _walletReadSource.SetWalletService(_walletService);
             _sceneController.SetRewardGrantService(_rewardGrantService);
+            _sceneController.InitializeEnemyBinders(_enemyRuntimeFactory);
         }
         public void Tick()
         {

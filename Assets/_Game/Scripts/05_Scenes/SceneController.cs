@@ -42,6 +42,21 @@ namespace BillGameCore.Scenes
                 throw new InvalidOperationException("SceneController requires a PlayerDeathHudView reference.");
             }
             _playerDeathHudView.RestartRequested += HandleRestartRequested;
+        }
+        public void SetRewardGrantService(IRewardGrantService rewardGrantService)
+        {
+            _rewardGrantService = rewardGrantService;
+        }
+        public void SetInputContextService(IInputContextService inputContextService)
+        {
+            _inputContextService = inputContextService ?? throw new ArgumentNullException(nameof(inputContextService));
+        }
+        public void InitializeEnemyBinders(EnemyRuntimeFactory enemyRuntimeFactory)
+        {
+            if (enemyRuntimeFactory == null)
+            {
+                throw new ArgumentNullException(nameof(enemyRuntimeFactory));
+            }
             if (_enemyBinders == null || _enemyBinders.Length == 0)
             {
                 return;
@@ -57,15 +72,8 @@ namespace BillGameCore.Scenes
                 }
 
                 enemyBinder.DiedCallback = HandleEnemyDied;
+                enemyBinder.InitializeRuntime(enemyRuntimeFactory.Create(enemyBinder.Config));
             }
-        }
-        public void SetRewardGrantService(IRewardGrantService rewardGrantService)
-        {
-            _rewardGrantService = rewardGrantService;
-        }
-        public void SetInputContextService(IInputContextService inputContextService)
-        {
-            _inputContextService = inputContextService ?? throw new ArgumentNullException(nameof(inputContextService));
         }
         private void Update()
         {
