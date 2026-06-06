@@ -1114,6 +1114,7 @@ MonoBehaviour:
   _walletReadSource: {fileID: 1727451413}
   _playerViewPrefab: {fileID: 6439526814168233900, guid: c2a0b62e20eba414d825ea5e9c19ba57, type: 3}
   _playerConfig: {fileID: 11400000, guid: 263fcbf19d9821842bcb6e8b20850a7b, type: 2}
+  _lootBinderPrefab: {fileID: 8449681745848723174, guid: d6b2f97a2b3a6aa4f8dc8bbbd0952339, type: 3}
 --- !u!4 &963745221
 Transform:
   m_ObjectHideFlags: 0

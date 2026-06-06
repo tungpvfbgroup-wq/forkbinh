@@ -274,10 +274,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -298,8 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43393d6c5c70f4649a494331539fdb89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BillGameCore.Modules.Player::BillGameCore.Modules.Player.Presentation.PlayerView
-  _spriteRenderer: {fileID: 5845696541798677015}
-  _bodyCollider: {fileID: 3670076140373497837}
   _rigidbody2D: {fileID: 497126530874415761}
   _attackSensor: {fileID: 6826782908492486428}
   _interactSensor: {fileID: 7923770461141019594}

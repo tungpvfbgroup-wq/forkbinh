@@ -56,6 +56,7 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
             _view.ShowCollectedState();
             _targetCollider.enabled = false;
             CollectedCallback?.Invoke(result);
+            Destroy(gameObject);
         }
 
         private LootPresenter GetRequiredPresenter()
@@ -78,6 +79,10 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
             if (_targetCollider == null)
             {
                 throw new InvalidOperationException("LootBinder requires a Collider2D reference.");
+            }
+            if (!_targetCollider.isTrigger)
+            {
+                throw new InvalidOperationException("LootBinder requires a trigger Collider2D reference.");
             }
         }
     }

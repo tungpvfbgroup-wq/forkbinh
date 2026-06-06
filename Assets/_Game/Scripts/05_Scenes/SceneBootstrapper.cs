@@ -1,5 +1,6 @@
 using BillGameCore.Modules.Enemy.Presentation;
 using BillGameCore.Modules.Input.Infrastructure;
+using BillGameCore.Modules.InteractionGroup.Loot.Presentation;
 using BillGameCore.Modules.Player.Presentation;
 using BillGameCore.SharedPorts.Economy;
 using System;
@@ -14,6 +15,7 @@ namespace BillGameCore.Scenes
         private readonly SceneController _sceneController;
         private readonly WalletReadSource _walletReadSource;
         private readonly EnemyRuntimeFactory _enemyRuntimeFactory;
+        private readonly LootSpawner _lootSpawner;
         private readonly IWalletService _walletService;
         private readonly IRewardGrantService _rewardGrantService;
 
@@ -25,6 +27,7 @@ namespace BillGameCore.Scenes
             SceneController sceneController,
             WalletReadSource walletReadSource,
             EnemyRuntimeFactory enemyRuntimeFactory,
+            LootSpawner lootSpawner,
             IWalletService walletService,
             IRewardGrantService rewardGrantService)
         {
@@ -33,6 +36,7 @@ namespace BillGameCore.Scenes
             _sceneController = sceneController ?? throw new ArgumentNullException(nameof(sceneController));
             _walletReadSource = walletReadSource ?? throw new ArgumentNullException(nameof(walletReadSource));
             _enemyRuntimeFactory = enemyRuntimeFactory ?? throw new ArgumentNullException(nameof(enemyRuntimeFactory));
+            _lootSpawner = lootSpawner ?? throw new ArgumentNullException(nameof(lootSpawner));
             _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             _rewardGrantService = rewardGrantService ?? throw new ArgumentNullException(nameof(rewardGrantService));
         }
@@ -44,6 +48,7 @@ namespace BillGameCore.Scenes
             _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
             _walletReadSource.SetWalletService(_walletService);
             _sceneController.SetRewardGrantService(_rewardGrantService);
+            _sceneController.SetLootSpawner(_lootSpawner);
             _sceneController.InitializeEnemyBinders(_enemyRuntimeFactory);
         }
         public void Tick()

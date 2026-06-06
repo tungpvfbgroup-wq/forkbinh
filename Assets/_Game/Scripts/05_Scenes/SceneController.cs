@@ -3,6 +3,8 @@ using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Enemy.Presentation;
 using BillGameCore.Modules.InteractionGroup.Chest.Application;
 using BillGameCore.Modules.InteractionGroup.Chest.Presentation;
+using BillGameCore.Modules.InteractionGroup.Loot.Application;
+using BillGameCore.Modules.InteractionGroup.Loot.Presentation;
 using BillGameCore.SharedPorts.Economy;
 using BillGameCore.SharedPorts.Input;
 using System;
@@ -18,6 +20,7 @@ namespace BillGameCore.Scenes
         [SerializeField] private PlayerDeathHudView _playerDeathHudView;
         private IRewardGrantService _rewardGrantService;
         private IInputContextService _inputContextService;
+        private LootSpawner _lootSpawner;
         private bool _isPlayerDead;
         private bool _isRestarting;
 
@@ -46,6 +49,10 @@ namespace BillGameCore.Scenes
         public void SetRewardGrantService(IRewardGrantService rewardGrantService)
         {
             _rewardGrantService = rewardGrantService;
+        }
+        public void SetLootSpawner(LootSpawner lootSpawner)
+        {
+            _lootSpawner = lootSpawner ?? throw new ArgumentNullException(nameof(lootSpawner));
         }
         public void SetInputContextService(IInputContextService inputContextService)
         {
@@ -127,12 +134,32 @@ namespace BillGameCore.Scenes
         }
         public void HandleEnemyDied(BillEntityId enemyId, RewardBundle reward, Vector2 deathWorldPosition)
         {
-            if (_rewardGrantService == null)
+            if (_lootSpawner == null)
             {
-                throw new InvalidOperationException("SceneController requires an IRewardGrantService before handling enemy rewards.");
+                throw new InvalidOperationException("SceneController requires a LootSpawner before handling enemy loot.");
             }
 
-            _rewardGrantService.Grant(reward);
+            if (reward.Gold == 0 && reward.Experience == 0)
+            {
+                return;
+            }
+
+            var lootBinder = _lootSpawner.Spawn(deathWorldPosition, reward);
+            lootBinder.CollectedCallback = HandleLootCollected;
+        }
+        public void HandleLootCollected(LootCollectResult result)
+        {
+            if (_rewardGrantService == null)
+            {
+                throw new InvalidOperationException("SceneController requires an IRewardGrantService before handling collected loot.");
+            }
+
+            if (!result.WasCollected)
+            {
+                return;
+            }
+
+            _rewardGrantService.Grant(result.Reward);
         }
         public void HandleChestOpened(ChestOpenResult result)
         {

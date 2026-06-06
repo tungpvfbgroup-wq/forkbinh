@@ -1,15 +1,16 @@
+using BillGameCore.Modules.Enemy.Presentation;
+using BillGameCore.Modules.Input.Application;
+using BillGameCore.Modules.Input.Commands;
+using BillGameCore.Modules.Input.Infrastructure;
+using BillGameCore.Modules.InteractionGroup.Loot.Presentation;
+using BillGameCore.Modules.Player.Infrastructure.Config;
+using BillGameCore.Modules.Player.Presentation;
+using BillGameCore.SharedPorts.Economy;
+using BillGameCore.SharedPorts.Input;
 using System;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using BillGameCore.Modules.Input.Application;
-using BillGameCore.Modules.Input.Commands;
-using BillGameCore.Modules.Input.Infrastructure;
-using BillGameCore.Modules.Player.Presentation;
-using BillGameCore.SharedPorts.Economy;
-using BillGameCore.SharedPorts.Input;
-using BillGameCore.Modules.Player.Infrastructure.Config;
-using BillGameCore.Modules.Enemy.Presentation;
 namespace BillGameCore.Scenes
 {
     public sealed class BootstrapSceneLifetimeScope : LifetimeScope
@@ -21,6 +22,7 @@ namespace BillGameCore.Scenes
         [SerializeField] private WalletReadSource _walletReadSource;
         [SerializeField] private PlayerView _playerViewPrefab;
         [SerializeField] private PlayerConfig _playerConfig;
+        [SerializeField] private LootBinder _lootBinderPrefab;
         protected override void Configure(IContainerBuilder builder)
         {
             ValidateConfiguration();
@@ -57,6 +59,9 @@ namespace BillGameCore.Scenes
                 resolver => new RewardGrantService(resolver.Resolve<IWalletWriteService>()),
                 Lifetime.Scoped);
             builder.Register<EnemyRuntimeFactory>(Lifetime.Scoped);
+            builder.Register<LootSpawner>(
+                _ => new LootSpawner(_lootBinderPrefab), Lifetime.Scoped);
+
             builder.RegisterEntryPoint<SceneBootstrapper>(Lifetime.Scoped);
         }
 
@@ -81,7 +86,10 @@ namespace BillGameCore.Scenes
             {
                 throw new InvalidOperationException("BootstrapSceneLifetimeScope requires a PlayerView prefab reference.");
             }
-
+            if (_lootBinderPrefab == null)
+            {
+                throw new InvalidOperationException("BootstrapSceneLifetimeScope requires a LootBinder prefab reference.");
+            }
             if (_playerConfig == null)
             {
                 throw new InvalidOperationException("BootstrapSceneLifetimeScope requires a PlayerConfig reference.");
