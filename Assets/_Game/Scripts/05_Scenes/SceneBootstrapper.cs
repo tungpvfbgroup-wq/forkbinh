@@ -34,6 +34,7 @@ namespace BillGameCore.Scenes
         {
             _playerRuntime = _playerSpawner.Spawn(Vector2.zero);
             _inputReader.SetControlledEntity(_playerRuntime.Id);
+            _sceneController.SetInputContextService(_inputReader);
             _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
             _walletReadSource.SetWalletService(_walletService);
             _sceneController.SetRewardGrantService(_rewardGrantService);

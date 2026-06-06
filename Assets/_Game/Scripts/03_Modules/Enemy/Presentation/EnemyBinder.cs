@@ -14,7 +14,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         [SerializeField] private float _debugDamageAmount = 1f;
         private EnemyRuntime _runtime;
         private float _nextAttackTime;
-        public Action<RewardBundle> DiedCallback { get; set; }
+        public Action<BillEntityId, RewardBundle, Vector2> DiedCallback { get; set; }
 
         private void Awake()
         {
@@ -93,10 +93,14 @@ namespace BillGameCore.Modules.Enemy.Presentation
         }
         private void HandleDied(RewardBundle reward)
         {
+            if (_runtime == null)
+            {
+                throw new InvalidOperationException("EnemyBinder requires a runtime before handling death.");
+            }
             _view.ShowDeadState();
             _targetCollider.enabled = false;
             _attackSensor.gameObject.SetActive(false);
-            DiedCallback?.Invoke(reward);
+            DiedCallback?.Invoke(_runtime.Id, reward, _view.WorldPosition);
         }
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {

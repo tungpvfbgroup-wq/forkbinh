@@ -12,6 +12,8 @@ namespace BillGameCore.Modules.Input.Infrastructure
         private readonly InputAction _moveAction;
         private readonly InputAction _attackAction;
         private readonly InputAction _interactAction;
+        private readonly InputActionMap _uiActionMap;
+        private readonly InputAction _submitAction;
         public InputContext? CurrentContext { get; private set; }
         public InputActionGateway(InputActionAsset actions)
         {
@@ -23,6 +25,9 @@ namespace BillGameCore.Modules.Input.Infrastructure
             _moveAction = _playerActionMap.FindAction("Move", throwIfNotFound: true);
             _attackAction = _playerActionMap.FindAction("Attack", throwIfNotFound: true);
             _interactAction = _playerActionMap.FindAction("Interact", throwIfNotFound: true);
+
+            _uiActionMap = actions.FindActionMap(InputContextNames.UI, throwIfNotFound: true);
+            _submitAction = _uiActionMap.FindAction("Submit", throwIfNotFound: true);
         }
         public void SetContext(InputContext context)
         {
@@ -32,6 +37,8 @@ namespace BillGameCore.Modules.Input.Infrastructure
                     CurrentContext = InputContext.Player;
                     return;
                 case InputContext.UI:
+                    CurrentContext = InputContext.UI;
+                    return;
                 case InputContext.Vehicle:
                 default:
                     throw new InvalidOperationException(
@@ -55,8 +62,7 @@ namespace BillGameCore.Modules.Input.Infrastructure
             return CurrentContext switch
             {
                 InputContext.Player => _playerActionMap,
-                InputContext.UI => throw new InvalidOperationException(
-                    $"InputActionGateway does not support context '{CurrentContext}'."),
+                InputContext.UI => _uiActionMap,
                 InputContext.Vehicle => throw new InvalidOperationException(
                     $"InputActionGateway does not support context '{CurrentContext}'."),
                 _ => throw new InvalidOperationException(
@@ -86,6 +92,21 @@ namespace BillGameCore.Modules.Input.Infrastructure
                     $"InputActionGateway requires Player context to read move, but current context is '{CurrentContext}'.");
             }
         }
-       
+
+        public bool WasSubmitPressedThisFrame()
+        {
+            EnsureUiContext();
+            return _submitAction.WasPressedThisFrame();
+        }
+
+        private void EnsureUiContext()
+        {
+            if (CurrentContext != InputContext.UI)
+            {
+                throw new InvalidOperationException(
+                    $"InputActionGateway requires UI context to read submit, but current context is '{CurrentContext}'.");
+            }
+        }
+
     }
 }

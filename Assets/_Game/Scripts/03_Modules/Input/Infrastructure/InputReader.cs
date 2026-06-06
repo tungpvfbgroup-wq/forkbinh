@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using VContainer;
 namespace BillGameCore.Modules.Input.Infrastructure
 {
-    public sealed class InputReader : MonoBehaviour
+    public sealed class InputReader : MonoBehaviour, IInputContextService
     {
         [SerializeField] private InputActionAsset _actions;
 
@@ -58,7 +58,21 @@ namespace BillGameCore.Modules.Input.Infrastructure
         }
         private void Update()
         {
-            ReadPlayerMap();
+            switch (_inputActionGateway.CurrentContext)
+            {
+                case InputContext.Player:
+                    ReadPlayerMap();
+                    return;
+                case InputContext.UI:
+                    return;
+                case InputContext.Vehicle:
+                    throw new InvalidOperationException("InputReader does not support Vehicle context yet.");
+                case null:
+                    throw new InvalidOperationException("InputReader requires an active input context before Update runs.");
+                default:
+                    throw new InvalidOperationException(
+                        $"InputReader does not support context '{_inputActionGateway.CurrentContext}'.");
+            }
         }
         private void ReadPlayerMap()
         { 
@@ -101,9 +115,22 @@ namespace BillGameCore.Modules.Input.Infrastructure
             {
                 return;
             }
-
-            gateway.SetContext(targetContext); 
+            gateway.DisableCurrentContext();
+            gateway.SetContext(targetContext);
+            gateway.EnableCurrentContext();
             _commandBuffer.Clear();
+        }
+
+        public bool WasSubmitPressedThisFrame()
+        {
+            var gateway = EnsureGateway();
+
+            if (gateway.CurrentContext != InputContext.UI)
+            {
+                return false;
+            }
+
+            return gateway.WasSubmitPressedThisFrame();
         }
     }
 }

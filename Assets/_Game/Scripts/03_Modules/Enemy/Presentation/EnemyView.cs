@@ -9,7 +9,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         [SerializeField] private Color _aliveColor = Color.white;
         [SerializeField] private Color _hitColor = Color.red;
         [SerializeField] private float _hitFlashDuration = 0.08f;
-
+        public Vector2 WorldPosition => transform.position;
         private Coroutine _hitFlashCoroutine;
         private void Awake()
         {

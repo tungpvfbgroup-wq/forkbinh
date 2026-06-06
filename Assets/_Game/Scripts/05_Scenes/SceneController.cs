@@ -1,11 +1,13 @@
 using BillGameCore.Core.Rewards;
+using BillGameCore.Core.ValueObjects;
+using BillGameCore.Modules.Enemy.Presentation;
 using BillGameCore.Modules.InteractionGroup.Chest.Application;
 using BillGameCore.Modules.InteractionGroup.Chest.Presentation;
 using BillGameCore.SharedPorts.Economy;
-using BillGameCore.Modules.Enemy.Presentation;
+using BillGameCore.SharedPorts.Input;
 using System;
 using UnityEngine;
-using BillGameCore.Core.ValueObjects;
+using UnityEngine.SceneManagement;
 namespace BillGameCore.Scenes
 {
     
@@ -13,7 +15,12 @@ namespace BillGameCore.Scenes
     {
         [SerializeField] private ChestBinder[] _chestBinders;
         [SerializeField] private EnemyBinder[] _enemyBinders;
+        [SerializeField] private PlayerDeathHudView _playerDeathHudView;
         private IRewardGrantService _rewardGrantService;
+        private IInputContextService _inputContextService;
+        private bool _isPlayerDead;
+        private bool _isRestarting;
+
         private void Awake()
         {
             if (_chestBinders == null|| _chestBinders.Length == 0)
@@ -30,6 +37,11 @@ namespace BillGameCore.Scenes
                     chestBinder.OpenedCallback = HandleChestOpened;
             }
 
+            if (_playerDeathHudView == null)
+            {
+                throw new InvalidOperationException("SceneController requires a PlayerDeathHudView reference.");
+            }
+            _playerDeathHudView.RestartRequested += HandleRestartRequested;
             if (_enemyBinders == null || _enemyBinders.Length == 0)
             {
                 return;
@@ -51,15 +63,61 @@ namespace BillGameCore.Scenes
         {
             _rewardGrantService = rewardGrantService;
         }
+        public void SetInputContextService(IInputContextService inputContextService)
+        {
+            _inputContextService = inputContextService ?? throw new ArgumentNullException(nameof(inputContextService));
+        }
+        private void Update()
+        {
+            if (!_isPlayerDead || _isRestarting)
+            {
+                return;
+            }
+
+            if (_inputContextService == null)
+            {
+                return;
+            }
+
+            if (_inputContextService.WasSubmitPressedThisFrame())
+            {
+                HandleRestartRequested();
+            }
+        }
         public void HandlePlayerDied(BillEntityId playerId, RewardBundle reward, Vector2 deathWorldPosition)
         {
+            if (_isPlayerDead)
+            {
+                return;
+            }
+
+            _isPlayerDead = true;
+            if (_inputContextService == null)
+            {
+                throw new InvalidOperationException("SceneController requires an input context service before handling player death.");
+            }
+
+            _inputContextService.SwitchContext(InputContext.UI);
+            _playerDeathHudView.ShowPlayerDied();
             Debug.Log(
                 $"<color=#ff3333><b>[PLAYER DIED]</b></color> Id: <color=#00ffffff><b>{playerId}</b></color> | " +
                 $"Reward Gold: <color=#ffff00><b>{reward.Gold}</b></color> | " +
                 $"Reward Exp: <color=#ff00ff><b>{reward.Experience}</b></color> | " +
                 $"Position: <color=#7fff00>{deathWorldPosition}</color>");
         }
-        public void HandleEnemyDied(RewardBundle reward)
+        private void HandleRestartRequested()
+        {
+            if (!_isPlayerDead || _isRestarting)
+            {
+                return;
+            }
+
+            _isRestarting = true;
+
+            var activeScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(activeScene.path);
+        }
+        public void HandleEnemyDied(BillEntityId enemyId, RewardBundle reward, Vector2 deathWorldPosition)
         {
             if (_rewardGrantService == null)
             {
@@ -75,6 +133,13 @@ namespace BillGameCore.Scenes
                 throw new InvalidOperationException("SceneController requires an IRewardGrantService before handling chest rewards.");
             }
                 _rewardGrantService.Grant(result.Reward);
+        }
+        private void OnDestroy()
+        {
+            if (_playerDeathHudView != null)
+            {
+                _playerDeathHudView.RestartRequested -= HandleRestartRequested;
+            }
         }
     }
 }
