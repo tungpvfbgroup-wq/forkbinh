@@ -249,6 +249,7 @@ Status hiện tại:
 - Implementation chưa tồn tại.
 - `IWalletService` là read-only port cho UI/HUD: `Gold`, `Experience`.
 - `IRewardGrantService` là cổng grant toàn bộ `RewardBundle`: `void Grant(RewardBundle bundle)`.
+- `IRewardGrantService` chỉ được gọi khi reward thực sự được nhận. Với chest thì grant lúc mở chest; với enemy world-loot thì grant lúc loot được nhặt, không grant ngay ở enemy death.
 - Implementation mục tiêu nên là `RewardGrantService`, điều phối reward vào đúng hệ thống sở hữu dữ liệu. Không mặc định cho `EconomyService` ôm cả item reward.
 
 ### Player read contract
@@ -398,6 +399,7 @@ Nhiệm vụ:
 - Mediator cho scene-level events.
 - `HandlePlayerDied(...)` là handler riêng cho player death.
 - `HandleEnemyDied(...)` dành cho enemy death/reward/loot khi Enemy được tích hợp sau.
+- `HandleLootCollected(...)` là handler scene-level cho world-loot pickup khi loot được build.
 - `SetRewardGrantService(IRewardGrantService)` chỉ dùng khi EconomyService đã tồn tại.
 
 Không được:
@@ -700,8 +702,11 @@ EnemyApplication.ReceiveDamage()
     -> EnemyPresenter lấy EnemyView.WorldPosition
     -> OnDiedCallback(BillEntityId, RewardBundle, Vector2)
       -> SceneController.HandleEnemyDied()
-        -> IRewardGrantService.Grant(bundle) nếu EconomyService đã tồn tại
-        -> LootSpawner.Spawn(...) khi Loot được build
+        -> LootSpawner.Spawn(deathWorldPosition, bundle) khi Loot được build
+LootBinder / LootPresenter
+  -> khi player nhặt loot
+    -> SceneController.HandleLootCollected(...)
+      -> IRewardGrantService.Grant(bundle) nếu EconomyService đã tồn tại
 ```
 
 ---
