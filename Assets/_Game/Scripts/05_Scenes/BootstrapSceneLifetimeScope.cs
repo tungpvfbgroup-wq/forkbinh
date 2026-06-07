@@ -20,9 +20,11 @@ namespace BillGameCore.Scenes
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private SceneController _sceneController;
         [SerializeField] private WalletReadSource _walletReadSource;
+        [SerializeField] private InventoryReadSource _inventoryReadSource;
         [SerializeField] private PlayerView _playerViewPrefab;
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private LootBinder _lootBinderPrefab;
+
         protected override void Configure(IContainerBuilder builder)
         {
             ValidateConfiguration();
@@ -31,7 +33,7 @@ namespace BillGameCore.Scenes
             builder.RegisterComponent(_inputReader);
             builder.RegisterComponent(_sceneController);
             builder.RegisterComponent(_walletReadSource);
-
+            builder.RegisterComponent(_inventoryReadSource);
             builder.Register<CommandBuffer>(
                 _ => new CommandBuffer(CommandBufferCapacity),
                 Lifetime.Scoped);
@@ -81,7 +83,10 @@ namespace BillGameCore.Scenes
             {
                 throw new InvalidOperationException("BootstrapSceneLifetimeScope requires a WalletReadSource reference.");
             }
-
+            if (_inventoryReadSource == null)
+            {
+                throw new InvalidOperationException("BootstrapSceneLifetimeScope requires an InventoryReadSource reference.");
+            }
             if (_playerViewPrefab == null)
             {
                 throw new InvalidOperationException("BootstrapSceneLifetimeScope requires a PlayerView prefab reference.");

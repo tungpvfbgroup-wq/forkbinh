@@ -15,11 +15,13 @@ namespace BillGameCore.Scenes
         private readonly PlayerSpawner _playerSpawner;
         private readonly SceneController _sceneController;
         private readonly WalletReadSource _walletReadSource;
+        private readonly InventoryReadSource _inventoryReadSource;
         private readonly EnemyRuntimeFactory _enemyRuntimeFactory;
         private readonly LootSpawner _lootSpawner;
         private readonly IWalletService _walletService;
         private readonly IRewardGrantService _rewardGrantService;
         private readonly IInventoryWriteService _inventoryWriteService;
+        private readonly IInventoryReadService _inventoryReadService;
         private PlayerRuntime _playerRuntime;
 
         public SceneBootstrapper(
@@ -31,7 +33,10 @@ namespace BillGameCore.Scenes
             LootSpawner lootSpawner,
             IWalletService walletService,
             IRewardGrantService rewardGrantService,
-            IInventoryWriteService inventoryWriteService)
+            IInventoryWriteService inventoryWriteService,
+            InventoryReadSource inventoryReadSource,
+            IInventoryReadService inventoryReadService
+            )
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _playerSpawner = playerSpawner ?? throw new ArgumentNullException(nameof(playerSpawner));
@@ -42,6 +47,8 @@ namespace BillGameCore.Scenes
             _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             _rewardGrantService = rewardGrantService ?? throw new ArgumentNullException(nameof(rewardGrantService));
             _inventoryWriteService = inventoryWriteService ?? throw new ArgumentNullException(nameof(inventoryWriteService));
+            _inventoryReadSource = inventoryReadSource ?? throw new ArgumentNullException(nameof(inventoryReadSource));
+            _inventoryReadService = inventoryReadService ?? throw new ArgumentNullException(nameof(inventoryReadService));
         }
         public void Start()
         {
@@ -50,6 +57,7 @@ namespace BillGameCore.Scenes
             _sceneController.SetInputContextService(_inputReader);
             _playerRuntime.Presenter.OnDiedCallback = _sceneController.HandlePlayerDied;
             _walletReadSource.SetWalletService(_walletService);
+            _inventoryReadSource.SetInventoryReadService(_inventoryReadService);
             _sceneController.SetRewardGrantService(_rewardGrantService);
             _sceneController.SetLootSpawner(_lootSpawner);
             _sceneController.SetInventoryWriteService(_inventoryWriteService);
