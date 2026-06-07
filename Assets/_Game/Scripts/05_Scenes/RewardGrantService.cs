@@ -21,10 +21,6 @@ namespace BillGameCore.Scenes
             {
                 _wallet.AddExperience(bundle.Experience);
             }
-            if (bundle.Gold > 0 || bundle.Experience > 0)
-            {
-                Debug.Log($"Granted reward. Gold: {bundle.Gold}, Exp: {bundle.Experience}");
-            }
         }
     }
 }

@@ -114,11 +114,6 @@ namespace BillGameCore.Scenes
 
             _inputContextService.SwitchContext(InputContext.UI);
             _playerDeathHudView.ShowPlayerDied();
-            Debug.Log(
-                $"<color=#ff3333><b>[PLAYER DIED]</b></color> Id: <color=#00ffffff><b>{playerId}</b></color> | " +
-                $"Reward Gold: <color=#ffff00><b>{reward.Gold}</b></color> | " +
-                $"Reward Exp: <color=#ff00ff><b>{reward.Experience}</b></color> | " +
-                $"Position: <color=#7fff00>{deathWorldPosition}</color>");
         }
         private void HandleRestartRequested()
         {

@@ -52,7 +52,6 @@ namespace BillGameCore.Modules.Enemy.Presentation
             _runtime = runtime;
             _runtime.SetDiedCallback(HandleDied);
             var health = _runtime.GetHealth();
-            Debug.Log($"Enemy runtime ready. Health: {health.CurrentHealth}, IsDead: {health.IsDead}");
         }
         private void Update()
         {
@@ -88,8 +87,6 @@ namespace BillGameCore.Modules.Enemy.Presentation
 
             _nextAttackTime = Time.time + _config.AttackCooldown;
 
-            Debug.Log(
-                $"Enemy attack result. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
 
             if (result.AppliedDamage <= 0f)
             {
@@ -119,8 +116,6 @@ namespace BillGameCore.Modules.Enemy.Presentation
             {
                 _view.ShowHitState();
             }
-            Debug.Log(
-    $"Enemy took damage. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
 
             return result;
         }
@@ -148,8 +143,6 @@ namespace BillGameCore.Modules.Enemy.Presentation
             var damageInfo = new DamageInfo(_debugDamageAmount, BillEntityId.Invalid, false);
             var result = _runtime.ReceiveDamage(damageInfo);
 
-            Debug.Log(
-                $"Enemy took damage. Applied: {result.AppliedDamage}, Remaining: {result.RemainingHealth}, JustDied: {result.JustDied}");
         }
     }
 }
