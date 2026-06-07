@@ -2,6 +2,7 @@ using System;
 using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.Enemy.Domain;
 using BillGameCore.Core.Combat;
+using BillGameCore.Core.Inventory;
 namespace BillGameCore.Modules.Enemy.Application
 {
     public sealed class EnemyApplication : IDamageReceiver
@@ -9,7 +10,7 @@ namespace BillGameCore.Modules.Enemy.Application
         private readonly EnemyState _state;
         private readonly EnemyDefinition _definition;
 
-        public Action<RewardBundle> DiedCallback { get; set; }
+        public Action<RewardBundle, ItemStack> DiedCallback { get; set; }
         public EnemyApplication(EnemyDefinition definition, EnemyState state)
         {
             _definition = definition;
@@ -45,7 +46,9 @@ namespace BillGameCore.Modules.Enemy.Application
 
             _state.SetCurrentHealth(0f);
             _state.MarkDead();
-            DiedCallback?.Invoke(new RewardBundle(_definition.GoldReward, _definition.ExperienceReward));
+            DiedCallback?.Invoke(
+                new RewardBundle(_definition.GoldReward, _definition.ExperienceReward),
+                _definition.ItemDrop);
             return new DamageResult(appliedDamage, 0f, true);
         }
     }

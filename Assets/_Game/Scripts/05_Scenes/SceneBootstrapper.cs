@@ -3,6 +3,7 @@ using BillGameCore.Modules.Input.Infrastructure;
 using BillGameCore.Modules.InteractionGroup.Loot.Presentation;
 using BillGameCore.Modules.Player.Presentation;
 using BillGameCore.SharedPorts.Economy;
+using BillGameCore.SharedPorts.Inventory;
 using System;
 using UnityEngine;
 using VContainer.Unity;
@@ -18,7 +19,7 @@ namespace BillGameCore.Scenes
         private readonly LootSpawner _lootSpawner;
         private readonly IWalletService _walletService;
         private readonly IRewardGrantService _rewardGrantService;
-
+        private readonly IInventoryWriteService _inventoryWriteService;
         private PlayerRuntime _playerRuntime;
 
         public SceneBootstrapper(
@@ -29,7 +30,8 @@ namespace BillGameCore.Scenes
             EnemyRuntimeFactory enemyRuntimeFactory,
             LootSpawner lootSpawner,
             IWalletService walletService,
-            IRewardGrantService rewardGrantService)
+            IRewardGrantService rewardGrantService,
+            IInventoryWriteService inventoryWriteService)
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _playerSpawner = playerSpawner ?? throw new ArgumentNullException(nameof(playerSpawner));
@@ -39,6 +41,7 @@ namespace BillGameCore.Scenes
             _lootSpawner = lootSpawner ?? throw new ArgumentNullException(nameof(lootSpawner));
             _walletService = walletService ?? throw new ArgumentNullException(nameof(walletService));
             _rewardGrantService = rewardGrantService ?? throw new ArgumentNullException(nameof(rewardGrantService));
+            _inventoryWriteService = inventoryWriteService ?? throw new ArgumentNullException(nameof(inventoryWriteService));
         }
         public void Start()
         {
@@ -49,6 +52,7 @@ namespace BillGameCore.Scenes
             _walletReadSource.SetWalletService(_walletService);
             _sceneController.SetRewardGrantService(_rewardGrantService);
             _sceneController.SetLootSpawner(_lootSpawner);
+            _sceneController.SetInventoryWriteService(_inventoryWriteService);
             _sceneController.InitializeEnemyBinders(_enemyRuntimeFactory);
         }
         public void Tick()

@@ -4,6 +4,7 @@ using BillGameCore.Modules.Enemy.Application;
 using BillGameCore.Core.ValueObjects;
 using System;
 using UnityEngine;
+using BillGameCore.Core.Inventory;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public class EnemyRuntime : IDisposable
@@ -20,7 +21,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
             }
             Id = entityId;
         }
-        public void SetDiedCallback(Action<RewardBundle> dieCallback)
+        public void SetDiedCallback(Action<RewardBundle, ItemStack> dieCallback)
         {
             if (_isDisposed)
             {

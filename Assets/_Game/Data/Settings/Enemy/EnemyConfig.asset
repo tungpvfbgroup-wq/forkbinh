@@ -17,3 +17,5 @@ MonoBehaviour:
   <AttackCooldown>k__BackingField: 2
   <GoldReward>k__BackingField: 38
   <ExperienceReward>k__BackingField: 79
+  <DroppedItemId>k__BackingField: slime_gel
+  <DroppedItemAmount>k__BackingField: 1

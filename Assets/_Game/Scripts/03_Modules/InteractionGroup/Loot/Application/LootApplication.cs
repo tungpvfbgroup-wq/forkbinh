@@ -30,6 +30,11 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Application
             }
 
             _state.MarkCollected();
+            if (_definition.HasItemStack)
+            {
+                return new LootCollectResult(true, _definition.ItemStack);
+            }
+
             return new LootCollectResult(true, _definition.Reward);
         }
     }

@@ -3,12 +3,13 @@ using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.Enemy.Application;
 using System;
 using BillGameCore.Core.Combat;
+using BillGameCore.Core.Inventory;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public class EnemyPresenter : IDisposable
     {
         private readonly EnemyApplication _application;
-        public Action<RewardBundle> DiedCallback { get; set; }
+        public Action<RewardBundle, ItemStack> DiedCallback { get; set; }
         public EnemyPresenter(EnemyApplication application)
         {
             _application = application;
@@ -22,9 +23,9 @@ namespace BillGameCore.Modules.Enemy.Presentation
         {
             return _application.ReceiveDamage(damageInfo);
         }
-        private void HandleDied(RewardBundle reward)
+        private void HandleDied(RewardBundle reward, ItemStack itemStack)
         {
-            DiedCallback?.Invoke(reward);
+            DiedCallback?.Invoke(reward, itemStack);
         }
 
         public void Dispose()

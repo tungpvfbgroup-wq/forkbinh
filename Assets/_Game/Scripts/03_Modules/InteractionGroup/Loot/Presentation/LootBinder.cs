@@ -1,8 +1,9 @@
-using System;
 using BillGameCore.Core.Interaction;
+using BillGameCore.Core.Inventory;
 using BillGameCore.Core.Rewards;
 using BillGameCore.Modules.InteractionGroup.Loot.Application;
 using BillGameCore.Modules.InteractionGroup.Loot.Domain;
+using System;
 using UnityEngine;
 
 namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
@@ -23,14 +24,22 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
             _targetCollider.enabled = false;
         }
 
+       
         public void Initialize(RewardBundle reward)
+        {
+            InitializeDefinition(new LootDefinition(reward));
+        }
+        public void Initialize(ItemStack itemStack)
+        {
+            InitializeDefinition(new LootDefinition(itemStack));
+        }
+        private void InitializeDefinition(LootDefinition definition)
         {
             if (_presenter != null)
             {
                 throw new InvalidOperationException("LootBinder is already initialized.");
             }
 
-            var definition = new LootDefinition(reward);
             var state = new LootState();
             var application = new LootApplication(state, definition);
             var presenter = new LootPresenter(application);
@@ -40,7 +49,6 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
             _view.ShowAvailableState();
             _targetCollider.enabled = true;
         }
-
         public bool CanInteract()
         {
             return GetRequiredPresenter().CanInteract();

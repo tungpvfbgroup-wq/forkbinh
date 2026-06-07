@@ -1,3 +1,4 @@
+using BillGameCore.Core.Inventory;
 using BillGameCore.Core.Rewards;
 using BillGameCore.Core.ValueObjects;
 using BillGameCore.Modules.Enemy.Presentation;
@@ -7,6 +8,7 @@ using BillGameCore.Modules.InteractionGroup.Loot.Application;
 using BillGameCore.Modules.InteractionGroup.Loot.Presentation;
 using BillGameCore.SharedPorts.Economy;
 using BillGameCore.SharedPorts.Input;
+using BillGameCore.SharedPorts.Inventory;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,11 +21,12 @@ namespace BillGameCore.Scenes
         [SerializeField] private EnemyBinder[] _enemyBinders;
         [SerializeField] private PlayerDeathHudView _playerDeathHudView;
         private IRewardGrantService _rewardGrantService;
+        private IInventoryWriteService _inventoryWriteService;
         private IInputContextService _inputContextService;
         private LootSpawner _lootSpawner;
         private bool _isPlayerDead;
         private bool _isRestarting;
-
+        private const float MultiLootHorizontalOffset = 0.15f;
         private void Awake()
         {
             if (_chestBinders == null|| _chestBinders.Length == 0)
@@ -49,6 +52,10 @@ namespace BillGameCore.Scenes
         public void SetRewardGrantService(IRewardGrantService rewardGrantService)
         {
             _rewardGrantService = rewardGrantService;
+        }
+        public void SetInventoryWriteService(IInventoryWriteService inventoryWriteService)
+        {
+            _inventoryWriteService = inventoryWriteService ?? throw new ArgumentNullException(nameof(inventoryWriteService));
         }
         public void SetLootSpawner(LootSpawner lootSpawner)
         {
@@ -127,31 +134,70 @@ namespace BillGameCore.Scenes
             var activeScene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(activeScene.path);
         }
-        public void HandleEnemyDied(BillEntityId enemyId, RewardBundle reward, Vector2 deathWorldPosition)
+        public void HandleEnemyDied(BillEntityId enemyId, RewardBundle reward, ItemStack itemStack, Vector2 deathWorldPosition)
         {
+            var hasReward =
+                reward.Gold != 0 ||
+                reward.Experience != 0;
+
+            var hasItemStack = itemStack.IsValid;
+
+            if (!hasReward && !hasItemStack)
+            {
+                return;
+            }
+
             if (_lootSpawner == null)
             {
                 throw new InvalidOperationException("SceneController requires a LootSpawner before handling enemy loot.");
             }
 
-            if (reward.Gold == 0 && reward.Experience == 0)
+            if (hasReward)
             {
-                return;
+                var rewardLootPosition = hasItemStack
+                    ? deathWorldPosition + new Vector2(-MultiLootHorizontalOffset, 0f)
+                    : deathWorldPosition;
+
+                var rewardLoot = _lootSpawner.Spawn(rewardLootPosition, reward);
+                rewardLoot.CollectedCallback = HandleLootCollected;
             }
 
-            var lootBinder = _lootSpawner.Spawn(deathWorldPosition, reward);
-            lootBinder.CollectedCallback = HandleLootCollected;
-        }
+            if (hasItemStack)
+            {
+                var itemLootPosition = hasReward
+                    ? deathWorldPosition + new Vector2(MultiLootHorizontalOffset, 0f)
+                    : deathWorldPosition;
+
+                var itemLoot = _lootSpawner.Spawn(itemLootPosition, itemStack);
+                itemLoot.CollectedCallback = HandleLootCollected;
+            }
+        }        
         public void HandleLootCollected(LootCollectResult result)
         {
-            if (_rewardGrantService == null)
-            {
-                throw new InvalidOperationException("SceneController requires an IRewardGrantService before handling collected loot.");
-            }
-
             if (!result.WasCollected)
             {
                 return;
+            }
+
+            if (result.HasItemStack)
+            {
+                if (_inventoryWriteService == null)
+                {
+                    throw new InvalidOperationException("SceneController requires an IInventoryWriteService before handling collected item loot.");
+                }
+
+                _inventoryWriteService.AddItem(result.ItemStack);
+                return;
+            }
+
+            if (!result.HasReward)
+            {
+                return;
+            }
+
+            if (_rewardGrantService == null)
+            {
+                throw new InvalidOperationException("SceneController requires an IRewardGrantService before handling collected reward loot.");
             }
 
             _rewardGrantService.Grant(result.Reward);

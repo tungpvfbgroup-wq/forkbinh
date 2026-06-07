@@ -1,5 +1,6 @@
-using System;
+using BillGameCore.Core.Inventory;
 using BillGameCore.Core.Rewards;
+using System;
 using UnityEngine;
 
 namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
@@ -15,9 +16,19 @@ namespace BillGameCore.Modules.InteractionGroup.Loot.Presentation
 
         public LootBinder Spawn(Vector2 worldPosition, RewardBundle reward)
         {
-            var lootBinder = UnityEngine.Object.Instantiate(_lootBinderPrefab, worldPosition, Quaternion.identity);
+            var lootBinder = SpawnBinder(worldPosition);
             lootBinder.Initialize(reward);
             return lootBinder;
+        }
+        public LootBinder Spawn(Vector2 worldPosition, ItemStack itemStack)
+        {
+            var lootBinder = SpawnBinder(worldPosition);
+            lootBinder.Initialize(itemStack);
+            return lootBinder;
+        }
+        private LootBinder SpawnBinder(Vector2 worldPosition)
+        {
+            return UnityEngine.Object.Instantiate(_lootBinderPrefab, worldPosition, Quaternion.identity);
         }
     }
 }

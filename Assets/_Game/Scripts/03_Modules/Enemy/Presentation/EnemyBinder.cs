@@ -3,6 +3,7 @@ using BillGameCore.Core.Rewards;
 using UnityEngine;
 using BillGameCore.Core.Combat;
 using BillGameCore.Core.ValueObjects;
+using BillGameCore.Core.Inventory;
 namespace BillGameCore.Modules.Enemy.Presentation
 {
     public sealed class EnemyBinder : MonoBehaviour, IDamageReceiver
@@ -15,7 +16,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
         public EnemyConfig Config => _config;
         private EnemyRuntime _runtime;
         private float _nextAttackTime;
-        public Action<BillEntityId, RewardBundle, Vector2> DiedCallback { get; set; }
+        public Action<BillEntityId, RewardBundle, ItemStack, Vector2> DiedCallback { get; set; }
 
         private void Awake()
         {
@@ -93,7 +94,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
                 return;
             }
         }
-        private void HandleDied(RewardBundle reward)
+        private void HandleDied(RewardBundle reward, ItemStack itemStack)
         {
             if (_runtime == null)
             {
@@ -102,7 +103,7 @@ namespace BillGameCore.Modules.Enemy.Presentation
             _view.ShowDeadState();
             _targetCollider.enabled = false;
             _attackSensor.gameObject.SetActive(false);
-            DiedCallback?.Invoke(_runtime.Id, reward, _view.WorldPosition);
+            DiedCallback?.Invoke(_runtime.Id, reward, itemStack, _view.WorldPosition);
         }
         public DamageResult ReceiveDamage(DamageInfo damageInfo)
         {
