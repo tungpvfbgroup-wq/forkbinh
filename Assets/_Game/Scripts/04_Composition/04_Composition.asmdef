@@ -1,0 +1,17 @@
+{
+    "name": "04_Composition",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9c8952ab5a6f13742855b40b6d3d9661",
+        "GUID:1dd884d25ebade644a0c45de61235f3e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

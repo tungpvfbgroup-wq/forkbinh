@@ -1,0 +1,16 @@
+{
+    "name": "BillGameCore.SharedPorts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9c8952ab5a6f13742855b40b6d3d9661"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
